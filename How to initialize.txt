@@ -10,10 +10,10 @@ git add .
 git commit -m "Initial commit: TimeTracker landing page"
 
 # 3. Remote hinzufügen und pushen
-git remote add origin https://github.com/DEIN_USERNAME/timetracker-website.git
+git remote add origin https://github.com/SimonKroisi/timetracker-website.git
 git branch -M main
 git push -u origin main
 
 # 4. GitHub Pages aktivieren:
 # Settings → Pages → Source: Deploy from branch → main → /root
-# Fertig! Deine Website ist unter https://DEIN_USERNAME.github.io/timetracker-website erreichbar
+# Fertig! Deine Website ist unter https://SimonKroisi.github.io/timetracker-website erreichbar
