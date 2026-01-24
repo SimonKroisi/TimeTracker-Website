@@ -1,0 +1,4281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TimeTracker – Track Time. Manage Projects. Stay in Sync.</title>
+  <meta name="description" content="TimeTracker helps teams organize, plan, and track their work efficiently. Time tracking, task management, and progress insights in one app.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --teal: #009688;
+      --teal-dark: #00796b;
+      --teal-light: #4db6ac;
+      --teal-glow: rgba(0, 150, 136, 0.4);
+      --purple: #7c3aed;
+      --purple-light: #a78bfa;
+      --orange: #f59e0b;
+      --pink: #ec4899;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-gradient: linear-gradient(180deg, #f0fdfa 0%, #ffffff 100%);
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --card-bg: #fff;
+      --card-border: #e2e8f0;
+      --shadow: rgba(0, 150, 136, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --shadow: rgba(0, 150, 136, 0.2);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-15px) rotate(-2deg); }
+    }
+
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px var(--teal-glow), 0 0 40px var(--teal-glow); }
+      50% { box-shadow: 0 0 40px var(--teal-glow), 0 0 80px var(--teal-glow); }
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scale-in {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg) scale(1); opacity: 1; }
+      100% { transform: translateY(-100px) rotate(720deg) scale(0); opacity: 0; }
+    }
+
+    @keyframes success-pulse {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+
+    @keyframes bounce-in {
+      0% { transform: scale(0.3); opacity: 0; }
+      50% { transform: scale(1.1); }
+      70% { transform: scale(0.9); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes bar-grow {
+      0% { transform: scaleY(0); }
+      60% { transform: scaleY(1.1); }
+      100% { transform: scaleY(1); }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .animate-on-scroll.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Navbar - Modern Glassmorphism */
+    .navbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 150, 136, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .navbar:hover {
+      box-shadow: 0 12px 40px rgba(0, 150, 136, 0.15);
+    }
+
+    [data-theme="dark"] .navbar {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.3s;
+    }
+
+    .nav-logo:hover {
+      transform: scale(1.03);
+    }
+
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px var(--shadow);
+      transition: transform 0.3s;
+    }
+
+    .nav-logo:hover img {
+      transform: rotate(-5deg) scale(1.1);
+    }
+
+    .nav-logo span {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--teal);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--teal);
+      box-shadow: 0 0 20px var(--teal-glow);
+    }
+
+    .theme-toggle-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      position: relative;
+      z-index: 1;
+    }
+
+    .theme-toggle-btn svg {
+      width: 18px;
+      height: 18px;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle-btn.sun svg {
+      fill: var(--text-secondary);
+    }
+
+    .theme-toggle-btn.moon svg {
+      fill: var(--text-secondary);
+    }
+
+    .theme-toggle-slider {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
+      border-radius: 50%;
+      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      box-shadow: 0 2px 10px var(--teal-glow);
+    }
+
+    [data-theme="dark"] .theme-toggle-slider {
+      transform: translateX(36px);
+      background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    }
+
+    .theme-toggle-btn.sun {
+      color: white;
+    }
+
+    [data-theme="dark"] .theme-toggle-btn.sun svg {
+      fill: var(--text-secondary);
+    }
+
+    [data-theme="dark"] .theme-toggle-btn.moon svg {
+      fill: white;
+    }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      background-size: 200% 200%;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px var(--teal-glow);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .nav-cta::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+      animation: shimmer 2.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 12px 40px var(--teal-glow);
+      background-position: 100% 50%;
+    }
+
+    /* Hero Section */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 40px 80px;
+      background: var(--bg-gradient);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg-shapes {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .hero-shape {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.5;
+    }
+
+    .hero-shape-1 {
+      width: 600px;
+      height: 600px;
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.3), rgba(77, 182, 172, 0.2));
+      top: -200px;
+      right: -200px;
+      animation: float 20s ease-in-out infinite;
+    }
+
+    .hero-shape-2 {
+      width: 400px;
+      height: 400px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(167, 139, 250, 0.15));
+      bottom: -100px;
+      left: -100px;
+      animation: floatReverse 15s ease-in-out infinite;
+    }
+
+    .hero-shape-3 {
+      width: 300px;
+      height: 300px;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(251, 191, 36, 0.15));
+      top: 40%;
+      left: 10%;
+      animation: float 18s ease-in-out infinite;
+    }
+
+    .hero-content {
+      max-width: 900px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 150, 136, 0.1);
+      border: 1px solid rgba(0, 150, 136, 0.3);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      color: var(--teal);
+      font-weight: 500;
+      margin-bottom: 30px;
+      animation: scale-in 0.6s ease-out;
+    }
+
+    .hero-badge svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .hero-logo-big {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      animation: scale-in 0.5s ease-out;
+    }
+
+    .hero-logo-big img {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      box-shadow: 0 8px 30px var(--shadow);
+    }
+
+    .hero-logo-big span {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .floating-icon.pink {
+      background: rgba(236, 72, 153, 0.15);
+    }
+    .floating-icon.pink svg { stroke: var(--pink); }
+
+    .hero-title {
+      font-size: clamp(2.8rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      animation: slide-up 0.8s ease-out;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 5s ease infinite;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto 40px;
+      line-height: 1.7;
+      animation: slide-up 0.8s ease-out 0.1s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: slide-up 0.8s ease-out 0.2s both;
+    }
+
+    .btn {
+      padding: 16px 32px;
+      border-radius: 14px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+      color: #fff;
+      box-shadow: 0 8px 30px var(--teal-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 40px var(--teal-glow);
+    }
+
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 2px solid var(--card-border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--teal);
+      color: var(--teal);
+      transform: translateY(-2px);
+    }
+
+    /* Floating Elements */
+    .hero-floating {
+      position: absolute;
+      z-index: 2;
+    }
+
+    .floating-card {
+      background: var(--card-bg);
+      padding: 16px 20px;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px var(--shadow);
+      border: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .floating-1 {
+      top: 22%;
+      left: 4%;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .floating-2 {
+      top: 28%;
+      right: 4%;
+      animation: floatReverse 5.5s ease-in-out infinite;
+      animation-delay: -1.2s;
+    }
+
+    .floating-3 {
+      bottom: 28%;
+      left: 6%;
+      animation: float 6.2s ease-in-out infinite;
+      animation-delay: -2.8s;
+    }
+
+    .floating-4 {
+      bottom: 22%;
+      right: 6%;
+      animation: floatReverse 8s ease-in-out infinite;
+      animation-delay: -0.5s;
+    }
+
+    .floating-5 {
+      top: 55%;
+      right: 12%;
+      animation: float 5s ease-in-out infinite;
+      animation-delay: -3.5s;
+    }
+
+    .floating-6 {
+      top: 18%;
+      left: 15%;
+      animation: floatReverse 6.8s ease-in-out infinite;
+      animation-delay: -4.2s;
+    }
+
+    .floating-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .floating-icon svg {
+      width: 24px;
+      height: 24px;
+      stroke-width: 2;
+    }
+
+    .floating-icon.teal {
+      background: rgba(0, 150, 136, 0.15);
+    }
+    .floating-icon.teal svg { stroke: var(--teal); }
+
+    .floating-icon.purple {
+      background: rgba(124, 58, 237, 0.15);
+    }
+    .floating-icon.purple svg { stroke: var(--purple); }
+
+    .floating-icon.orange {
+      background: rgba(245, 158, 11, 0.15);
+    }
+    .floating-icon.orange svg { stroke: var(--orange); }
+
+    .floating-text {
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .floating-subtext {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      background: var(--bg-secondary);
+      padding: 50px 40px;
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .stats-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 20px 30px;
+      border-radius: 16px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: default;
+      animation: stat-fade-in 0.8s ease-out forwards;
+      opacity: 0;
+    }
+
+    .stat-item:nth-child(1) { animation-delay: 0.1s; }
+    .stat-item:nth-child(2) { animation-delay: 0.25s; }
+    .stat-item:nth-child(3) { animation-delay: 0.4s; }
+    .stat-item:nth-child(4) { animation-delay: 0.55s; }
+
+    @keyframes stat-fade-in {
+      from { opacity: 0; transform: translateY(20px) scale(0.9); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .stat-item:hover {
+      background: var(--card-bg);
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 20px 40px var(--shadow);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      transition: transform 0.3s;
+    }
+
+    .stat-item:hover .stat-number {
+      transform: scale(1.1);
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-weight: 500;
+    }
+
+    /* Widget Card Styling */
+    .widget-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini-widget {
+      padding: 12px;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .mini-widget.tracking {
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.15), rgba(0, 150, 136, 0.05));
+      border: 1px solid rgba(0, 150, 136, 0.3);
+    }
+
+    .mini-widget.motivation {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .widget-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    .widget-time {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .widget-task {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .widget-streak {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .widget-msg {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .mini-widget.entries {
+      background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.05));
+      border: 1px solid rgba(236, 72, 153, 0.3);
+    }
+
+    .widget-last-entry {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--pink);
+    }
+
+    .widget-last-time {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .widget-divider-vertical {
+      height: 1px;
+      background: var(--card-border);
+      margin: 12px 0;
+      grid-column: 1 / -1;
+    }
+
+    .last-entries-mini {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .last-entry-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .last-entry-item .widget-last-entry {
+      margin-bottom: 0;
+    }
+
+    .last-entry-item .widget-last-time {
+      margin-top: 0;
+    }
+
+    .widget-divider {
+      height: 1px;
+      background: var(--card-border);
+      margin: 10px 0;
+    }
+
+    .last-entries-widget {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .entry-item-small {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      background: rgba(0, 150, 136, 0.05);
+      border-radius: 8px;
+      border: 1px solid rgba(0, 150, 136, 0.15);
+    }
+
+    .entry-info {
+      flex: 1;
+    }
+
+    .entry-title-small {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .entry-time-small {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .entry-duration-small {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--teal);
+      padding: 4px 8px;
+      background: rgba(0, 150, 136, 0.15);
+      border-radius: 4px;
+    }
+
+    /* Meeting Tracker Demo */
+    .meeting-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .meeting-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group input {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--card-border);
+      background: var(--bg-secondary);
+      color: var(--text);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .attendees-list {
+      display: flex;
+      gap: 8px;
+    }
+
+    .attendee {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    /* Last Entries List */
+    .last-entries-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .entry-item {
+      display: grid;
+      grid-template-columns: 100px 1fr 80px;
+      gap: 12px;
+      padding: 12px;
+      background: var(--bg-secondary);
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .entry-item:hover {
+      border-color: var(--teal);
+      background: rgba(0, 150, 136, 0.05);
+    }
+
+    .entry-time {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .entry-title {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .entry-duration {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-align: right;
+    }
+
+    /* Section Styling */
+    section {
+      padding: 120px 40px;
+      position: relative;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 80px;
+    }
+
+    .section-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 150, 136, 0.1);
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--teal);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* Features Grid - Fun Style */
+    .features-section {
+      background: var(--bg-gradient);
+    }
+
+    .features-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      padding: 40px 30px;
+      border-radius: 24px;
+      border: 1px solid var(--card-border);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--teal), var(--purple));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 60px var(--shadow);
+    }
+
+    .feature-card:hover::before {
+      opacity: 1;
+    }
+
+    .feature-card.large {
+      grid-column: span 2;
+      display: flex;
+      align-items: stretch;
+      gap: 40px;
+    }
+
+    .feature-card.large > div:last-child {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feature-card.small {
+      padding: 28px 32px;
+    }
+
+    .feature-card.small .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+
+    .feature-card.small .feature-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .feature-card.small h3 {
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .feature-card.small p {
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .feature-icon::after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 22px;
+      background: inherit;
+      opacity: 0.3;
+      filter: blur(10px);
+    }
+
+    .feature-icon svg {
+      width: 32px;
+      height: 32px;
+      stroke: white;
+      fill: none;
+      stroke-width: 2;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature-icon.teal { background: linear-gradient(135deg, var(--teal), var(--teal-light)); }
+    .feature-icon.purple { background: linear-gradient(135deg, var(--purple), var(--purple-light)); }
+    .feature-icon.orange { background: linear-gradient(135deg, var(--orange), #fbbf24); }
+    .feature-icon.pink { background: linear-gradient(135deg, var(--pink), #f472b6); }
+
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    /* Interactive Timer Demo - Flutter App Style */
+    .timer-demo-app {
+      margin-top: 24px;
+      padding: 32px 28px;
+      background: var(--card-bg);
+      border-radius: 24px;
+      border: 1px solid var(--card-border);
+      box-shadow: 0 10px 40px var(--shadow);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .timer-display-app {
+      font-size: 3.8rem;
+      font-weight: 700;
+      text-align: center;
+      color: var(--teal);
+      margin-bottom: 32px;
+      font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+      letter-spacing: 2px;
+      text-shadow: 0 2px 20px rgba(0, 150, 136, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .timer-display-app.running {
+      animation: timer-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes timer-glow {
+      0%, 100% { text-shadow: 0 2px 20px rgba(0, 150, 136, 0.2); }
+      50% { text-shadow: 0 2px 30px rgba(0, 150, 136, 0.4); }
+    }
+
+    .timer-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .timer-input {
+      flex: 1;
+      padding: 14px 16px;
+      padding-left: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: var(--bg-secondary);
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z'/%3E%3Cpath d='M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: 14px center;
+    }
+
+    .timer-input:focus {
+      border-color: var(--teal);
+    }
+
+    .timer-emoji-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      background: var(--bg-secondary);
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+    }
+
+    .timer-emoji-btn:hover {
+      border-color: var(--teal);
+      background: var(--card-bg);
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 8px 25px var(--shadow);
+    }
+
+    .timer-emoji-btn:active {
+      transform: scale(0.95);
+    }
+
+    .project-dropdown {
+      position: absolute;
+      bottom: calc(100% + 10px);
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 180px;
+      box-shadow: 0 10px 40px var(--shadow);
+      z-index: 100;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .project-dropdown.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .project-option {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .project-option:hover {
+      background: var(--bg-secondary);
+    }
+
+    .project-option .emoji {
+      font-size: 1.1rem;
+    }
+
+    .timer-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .timer-action-btn {
+      flex: 1;
+      padding: 14px 20px;
+      border-radius: 14px;
+      border: 2px solid;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer-action-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: currentColor;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+
+    .timer-action-btn:active {
+      transform: scale(0.95);
+    }
+
+    .timer-action-btn:active::after {
+      opacity: 0.15;
+    }
+
+    .timer-action-btn.primary {
+      background: rgba(0, 150, 136, 0.08);
+      border-color: var(--teal);
+      color: var(--teal);
+    }
+
+    .timer-action-btn.primary:hover {
+      background: rgba(0, 150, 136, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 150, 136, 0.3);
+    }
+
+    .timer-action-btn.primary:active {
+      transform: scale(0.95) translateY(0);
+    }
+
+    .timer-action-btn.pause {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .timer-action-btn.pause:hover {
+      background: rgba(245, 158, 11, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .timer-action-btn.pause:active {
+      transform: scale(0.95) translateY(0);
+    }
+
+    .timer-action-btn.stop {
+      background: rgba(239, 68, 68, 0.08);
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .timer-action-btn.stop:hover {
+      background: rgba(239, 68, 68, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .timer-action-btn.stop:active {
+      transform: scale(0.95) translateY(0);
+    }
+
+    .timer-action-btn.cancel {
+      background: var(--bg-secondary);
+      border-color: var(--text-secondary);
+      color: var(--text-secondary);
+    }
+
+    .timer-action-btn.cancel:hover {
+      background: rgba(100, 116, 139, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .timer-action-btn.cancel:active {
+      transform: scale(0.95) translateY(0);
+    }
+
+    .timer-action-btn.resume {
+      background: rgba(34, 197, 94, 0.08);
+      border-color: #22c55e;
+      color: #22c55e;
+    }
+
+    .timer-action-btn.resume:hover {
+      background: rgba(34, 197, 94, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
+    }
+
+    .timer-action-btn.resume:active {
+      transform: scale(0.95) translateY(0);
+    }
+
+    @keyframes btn-pulse {
+      0% { box-shadow: 0 0 0 0 currentColor; }
+      70% { box-shadow: 0 0 0 10px transparent; }
+      100% { box-shadow: 0 0 0 0 transparent; }
+    }
+
+    .timer-action-btn.clicked {
+      animation: btn-pulse 0.4s ease-out;
+    }
+
+    .timer-demo-app.success {
+      animation: success-pulse 0.6s ease;
+    }
+
+    .timer-demo-app .confetti {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      animation: confetti 1s ease-out forwards;
+      pointer-events: none;
+    }
+
+    .saved-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      background: rgba(34, 197, 94, 0.15);
+      color: #22c55e;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      animation: bounce-in 0.4s ease;
+      margin-bottom: 16px;
+    }
+
+    /* Interactive Feature Demos */
+    .feature-demo {
+      margin-top: 20px;
+      padding: 16px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    /* Chat Demo */
+    .chat-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .chat-message {
+      max-width: 80%;
+      padding: 10px 14px;
+      border-radius: 16px;
+      font-size: 0.85rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-message.sent {
+      align-self: flex-end;
+      background: var(--teal);
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-message.received {
+      align-self: flex-start;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-input-demo {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .chat-input-demo input {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      color: var(--text);
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    .chat-input-demo input:focus {
+      border-color: var(--teal);
+    }
+
+    .chat-send-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--teal);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .chat-send-btn:hover {
+      background: var(--teal-dark);
+      transform: scale(1.1);
+    }
+
+    .chat-send-btn svg {
+      width: 16px;
+      height: 16px;
+      fill: white;
+    }
+
+    /* Task Demo */
+    .task-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--card-bg);
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .task-item:hover {
+      border-color: var(--teal);
+    }
+
+    .task-checkbox {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .task-item.completed .task-checkbox {
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .task-checkbox svg {
+      width: 12px;
+      height: 12px;
+      fill: white;
+      opacity: 0;
+    }
+
+    .task-item.completed .task-checkbox svg {
+      opacity: 1;
+    }
+
+    .task-text {
+      font-size: 0.85rem;
+      flex: 1;
+      transition: all 0.2s;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+    }
+
+    /* Calendar Demo */
+    .calendar-demo {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 4px;
+    }
+
+    .calendar-day {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .calendar-day:hover {
+      background: var(--card-bg);
+    }
+
+    .calendar-day.today {
+      background: var(--teal);
+      color: white;
+      font-weight: 600;
+    }
+
+    .calendar-day.event::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--orange);
+    }
+
+    .calendar-day.today.event::after {
+      background: white;
+    }
+
+    /* Analytics Demo */
+    .analytics-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .analytics-bars {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      height: 70px;
+      gap: 6px;
+    }
+
+    .analytics-bar-wrapper {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .analytics-bar-inner {
+      width: 100%;
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .analytics-bar {
+      width: 100%;
+      background: linear-gradient(to top, var(--teal), var(--teal-light));
+      border-radius: 6px 6px 0 0;
+      min-height: 10px;
+      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      transform-origin: bottom;
+      position: relative;
+      animation: bar-breathe 3s ease-in-out infinite;
+    }
+
+    .analytics-bar:nth-child(1) { animation-delay: 0s; }
+    .analytics-bar-wrapper:nth-child(1) .analytics-bar { animation-delay: 0s; }
+    .analytics-bar-wrapper:nth-child(2) .analytics-bar { animation-delay: 0.4s; }
+    .analytics-bar-wrapper:nth-child(3) .analytics-bar { animation-delay: 0.8s; }
+    .analytics-bar-wrapper:nth-child(4) .analytics-bar { animation-delay: 1.2s; }
+    .analytics-bar-wrapper:nth-child(5) .analytics-bar { animation-delay: 1.6s; }
+    .analytics-bar-wrapper:nth-child(6) .analytics-bar { animation-delay: 2s; }
+    .analytics-bar-wrapper:nth-child(7) .analytics-bar { animation-delay: 2.4s; }
+
+    @keyframes bar-breathe {
+      0%, 100% { transform: scaleY(1); filter: brightness(1); }
+      50% { transform: scaleY(1.06); filter: brightness(1.1); }
+    }
+
+    .analytics-bar::before {
+      content: attr(data-value);
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--teal);
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .analytics-bar:hover {
+      filter: brightness(1.2) !important;
+      transform: scaleY(1.12) !important;
+      animation-play-state: paused;
+    }
+
+    .analytics-bar:hover::before {
+      opacity: 1;
+    }
+
+    .analytics-bar-wrapper:nth-child(even) .analytics-bar {
+      background: linear-gradient(to top, var(--orange), #fbbf24);
+    }
+
+    .analytics-bar-wrapper:nth-child(even) .analytics-bar::before {
+      color: var(--orange);
+    }
+
+    .analytics-day {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      margin-top: 6px;
+      flex-shrink: 0;
+    }
+
+    .analytics-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--card-border);
+      font-size: 0.8rem;
+    }
+
+    .analytics-summary-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .analytics-summary-value {
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .analytics-summary-label {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    /* Team Demo */
+    .team-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .team-member {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      border: 1px solid var(--card-border);
+    }
+
+    .team-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .team-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .team-name {
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .team-role {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .team-status {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .team-status.online {
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    }
+
+    .team-status.offline {
+      background: var(--card-border);
+    }
+
+    /* Notification Demo */
+    .notification-demo {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    .notification-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      background: var(--card-bg);
+      border-radius: 4px 12px 12px 4px;
+      border: 1px solid var(--card-border);
+      opacity: 1;
+      transform: translateX(0);
+      cursor: pointer;
+    }
+
+    .notification-item.animating {
+      animation: slideIn 0.4s ease forwards;
+    }
+
+    .notification-item.animating:nth-child(1) { animation-delay: 0s; }
+    .notification-item.animating:nth-child(2) { animation-delay: 1.5s; }
+    .notification-item.animating:nth-child(3) { animation-delay: 3.0s; }
+
+    @keyframes slideIn {
+      to { 
+        opacity: 1; 
+        transform: translateX(0); 
+      }
+    }
+
+    .notification-item::before {
+      content: '';
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      height: 100%;
+      width: 4px;
+      background: var(--teal);
+      border-radius: 4px 0 0 4px;
+      opacity: 0;
+    }
+
+    .notification-item.animating::before {
+      animation: notif-highlight 0.3s ease 0.3s forwards;
+    }
+
+    .notification-item.animating:nth-child(1)::before { animation-delay: 0.3s; }
+    .notification-item.animating:nth-child(2)::before { animation-delay: 1.8s; }
+    .notification-item.animating:nth-child(3)::before { animation-delay: 3.3s; }
+
+    @keyframes notif-highlight {
+      to { opacity: 1; }
+    }
+    }
+
+    .notif-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+    }
+
+    .notif-icon.chat { background: rgba(124, 58, 237, 0.15); }
+    .notif-icon.task { background: rgba(0, 150, 136, 0.15); }
+    .notif-icon.reminder { background: rgba(245, 158, 11, 0.15); }
+
+    .notif-icon-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      flex-shrink: 0;
+    }
+
+    .notif-icon-box.chat {
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(124, 58, 237, 0.05));
+      border: 1px solid rgba(124, 58, 237, 0.3);
+    }
+
+    .notif-icon-box.task {
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.2), rgba(0, 150, 136, 0.05));
+      border: 1px solid rgba(0, 150, 136, 0.3);
+    }
+
+    .notif-icon-box.reminder {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .notif-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .notif-content strong {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .notif-content span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .notif-time {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+    }
+
+    /* Widget Demo */
+    .widget-demo {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .mini-widget {
+      padding: 12px;
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    .mini-widget.tracking {
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.15), rgba(0, 150, 136, 0.05));
+      border: 1px solid rgba(0, 150, 136, 0.3);
+    }
+
+    .mini-widget.motivation {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .widget-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    .widget-time {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--teal);
+    }
+
+    .widget-task {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    .widget-streak {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--orange);
+    }
+
+    .widget-msg {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Tracki Section */
+    .tracki-section {
+      background: var(--bg-secondary);
+      overflow: hidden;
+    }
+
+    .tracki-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .tracki-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .tracki-image-wrapper {
+      position: relative;
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(124, 58, 237, 0.1));
+      border-radius: 50%;
+      padding: 40px;
+    }
+
+    .tracki-image-wrapper img {
+      width: 220px;
+      height: auto;
+      animation: float 4s ease-in-out infinite;
+      filter: drop-shadow(0 20px 40px rgba(0, 150, 136, 0.3));
+      transition: filter 0.5s, transform 0.3s;
+    }
+
+    .tracki-image-wrapper.happy img {
+      filter: drop-shadow(0 20px 40px rgba(34, 197, 94, 0.5));
+      animation: float 3s ease-in-out infinite, wiggle 0.5s ease-in-out;
+    }
+
+    .tracki-image-wrapper.sad img {
+      filter: drop-shadow(0 20px 40px rgba(148, 163, 184, 0.4)) grayscale(0.3);
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .tracki-mood {
+      display: none;
+    }
+
+    .tracki-speech-bubble {
+      position: absolute;
+      top: -20px;
+      right: -30px;
+      background: var(--card-bg);
+      border: 2px solid var(--teal);
+      border-radius: 20px;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px var(--shadow);
+      opacity: 0;
+      transform: scale(0.5) translateY(20px);
+      animation: speech-bubble-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+      z-index: 10;
+    }
+
+    .tracki-speech-bubble::before {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 30px;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+      border-top: 12px solid var(--teal);
+    }
+
+    .tracki-speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 32px;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-top: 10px solid var(--card-bg);
+    }
+
+    .tracki-speech-bubble .emoji {
+      font-size: 1.4rem;
+    }
+
+    .tracki-speech-bubble .message {
+      color: var(--text);
+    }
+
+    @keyframes speech-bubble-in {
+      0% { opacity: 0; transform: scale(0.5) translateY(20px); }
+      60% { transform: scale(1.1) translateY(-5px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    @keyframes tracki-grow {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
+
+    .tracki-image-wrapper.reacting img {
+      animation: tracki-grow 0.5s ease-out;
+    }
+
+    .tracki-glow {
+      position: absolute;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(circle, var(--teal-glow) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: pulse-glow 3s ease-in-out infinite;
+      z-index: -1;
+      border-radius: 50%;
+    }
+
+    .streak-badges {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .streak-badge {
+      background: var(--card-bg);
+      padding: 12px 18px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px var(--shadow);
+      border: 1px solid var(--card-border);
+      animation: floatReverse 5s ease-in-out infinite;
+    }
+
+    .streak-badge:nth-child(2) { animation-delay: -1s; }
+    .streak-badge:nth-child(3) { animation-delay: -2s; }
+
+    .streak-fire { color: #ef4444; }
+    .streak-ice { color: #3b82f6; }
+    .streak-star { color: #f59e0b; }
+
+    .tracki-content h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .tracki-content p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .streak-progress {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 30px;
+    }
+
+    .streak-dot {
+      width: 40px;
+      height: 8px;
+      border-radius: 4px;
+      background: var(--card-border);
+    }
+
+    .streak-dot.active {
+      background: linear-gradient(90deg, var(--teal), var(--purple));
+    }
+
+    /* How It Works - Visual Journey */
+    .how-section {
+      background: var(--bg-gradient);
+      overflow: hidden;
+    }
+
+    .journey-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      gap: 40px;
+      position: relative;
+    }
+
+    .journey-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-height: 400px;
+    }
+
+    .journey-number {
+      width: 56px;
+      height: 56px;
+      background: linear-gradient(135deg, var(--teal), var(--teal-light));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 30px rgba(0, 150, 136, 0.3);
+      z-index: 2;
+    }
+
+    .journey-card {
+      background: var(--card-bg);
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .journey-card:hover {
+      transform: translateY(-12px);
+      border-color: var(--teal);
+      box-shadow: 0 30px 70px rgba(0, 150, 136, 0.15);
+    }
+
+    .journey-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px;
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.15), rgba(124, 58, 237, 0.1));
+      border-radius: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(0, 150, 136, 0.2);
+    }
+
+    .journey-icon svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .journey-card h3 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .journey-card p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .journey-emoji {
+      font-size: 2.4rem;
+      animation: float 3s ease-in-out infinite;
+      margin-top: 12px;
+    }
+
+    .journey-step:nth-child(2) .journey-emoji {
+      animation-delay: -1s;
+    }
+
+    .journey-step:nth-child(3) .journey-emoji {
+      animation-delay: -2s;
+    }
+
+    .journey-connector {
+      position: absolute;
+      right: -50px;
+      top: 80px;
+      width: 100px;
+      height: 60px;
+      z-index: 1;
+    }
+
+    .journey-step.last .journey-connector {
+      display: none;
+    }
+
+    .journey-connector svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Legacy roadmap styles - keep for compatibility */
+    .roadmap-container {
+      display: none;
+    }
+
+    .step-device:hover {
+      transform: translateY(-10px) scale(1.05);
+      border-color: var(--teal);
+      box-shadow: 0 20px 60px var(--teal-glow);
+    }
+
+    .step-device svg {
+      width: 50px;
+      height: 50px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 1.5;
+    }
+
+    .step-device .device-screen {
+      position: absolute;
+      width: 60%;
+      height: 70%;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      border-radius: 8px;
+      opacity: 0.1;
+    }
+
+    .step-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 4px 15px var(--teal-glow);
+    }
+
+    .step-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .step-title .emoji {
+      font-size: 1.4rem;
+    }
+
+    .step-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    /* Curved arrows between steps */
+    .step-arrow {
+      position: absolute;
+      top: 60px;
+      width: 80px;
+      height: 40px;
+      z-index: 2;
+    }
+
+    .step-arrow.arrow-1 {
+      left: calc(33% - 40px);
+    }
+
+    .step-arrow.arrow-2 {
+      left: calc(66% - 40px);
+    }
+
+    .step-arrow svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .step-arrow path {
+      fill: none;
+      stroke: var(--teal);
+      stroke-width: 2;
+      stroke-linecap: round;
+    }
+
+    .step-arrow .arrow-head {
+      fill: var(--teal);
+      stroke: none;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+      background: var(--bg-gradient);
+    }
+
+    .testimonials-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+    }
+
+    .testimonial-card {
+      background: var(--card-bg);
+      padding: 35px;
+      border-radius: 24px;
+      border: 1px solid var(--card-border);
+      transition: all 0.4s ease;
+      position: relative;
+    }
+
+    .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 60px var(--shadow);
+    }
+
+    .testimonial-card::before {
+      content: '"';
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 5rem;
+      font-family: Georgia, serif;
+      color: var(--teal);
+      opacity: 0.15;
+      line-height: 1;
+    }
+
+    .testimonial-stars {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-stars svg {
+      width: 20px;
+      height: 20px;
+      fill: #fbbf24;
+    }
+
+    .testimonial-text {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--text);
+      margin-bottom: 25px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .testimonial-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: white;
+    }
+
+    .testimonial-info h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .testimonial-info span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, var(--teal-dark) 0%, var(--teal) 50%, var(--purple) 100%);
+      background-size: 200% 200%;
+      animation: gradient-shift 10s ease infinite;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      color: white;
+      margin-bottom: 20px;
+    }
+
+    .cta-section p {
+      font-size: 1.2rem;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 40px;
+      line-height: 1.7;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-white {
+      background: white;
+      color: var(--teal-dark);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-white:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: white;
+    }
+
+    /* ============ DOWNLOAD MODAL ============ */
+    .download-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .download-modal.show {
+      display: flex;
+    }
+
+    .download-modal-content {
+      background: var(--bg-secondary);
+      border-radius: 16px;
+      padding: 40px;
+      max-width: 500px;
+      width: 90%;
+      border: 1px solid var(--card-border);
+      animation: slideUp 0.3s ease;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .download-modal-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .download-modal-header h2 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .download-modal-header p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .download-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .download-option {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .download-option:hover {
+      background: rgba(0, 150, 136, 0.05);
+      border-color: var(--teal);
+      transform: translateX(4px);
+    }
+
+    .download-option-icon {
+      font-size: 2rem;
+      width: 50px;
+      text-align: center;
+    }
+
+    .download-option-info h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+
+    .download-option-info p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .download-modal-close {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .download-modal-close button {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .download-modal-close button:hover {
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+
+    /* Platforms */
+    .platforms-section {
+      background: var(--bg-secondary);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+
+
+    .platform-icons {
+      display: flex;
+      justify-content: center;
+      gap: 60px;
+      flex-wrap: wrap;
+    }
+
+    .platform {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+    }
+
+    .platform:hover {
+      color: var(--teal);
+      transform: translateY(-5px);
+    }
+
+    .platform-icon-wrapper {
+      width: 70px;
+      height: 70px;
+      background: var(--card-bg);
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--card-border);
+      transition: all 0.3s;
+    }
+
+    .platform:hover .platform-icon-wrapper {
+      border-color: var(--teal);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
+    .platform svg {
+      width: 32px;
+      height: 32px;
+      fill: currentColor;
+    }
+
+    .platform span {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .platform-badge {
+      font-size: 0.65rem;
+      padding: 3px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .platform-badge.available {
+      background: rgba(0, 150, 136, 0.15);
+      color: var(--teal);
+    }
+
+    .platform-badge.soon {
+      background: rgba(148, 163, 184, 0.15);
+      color: var(--text-secondary);
+    }
+
+    .platform.coming-soon {
+      opacity: 0.6;
+    }
+
+    .platform.coming-soon:hover {
+      opacity: 1;
+    }
+
+    /* Footer - Minimal */
+    footer {
+      background: var(--bg);
+      padding: 60px 40px 30px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .footer-content {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-minimal {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .footer-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+    }
+
+    .footer-logo span {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-brand p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .footer-social {
+      display: flex;
+      gap: 12px;
+    }
+
+    .footer-social a {
+      width: 42px;
+      height: 42px;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all 0.3s;
+    }
+
+    .footer-social a:hover {
+      background: var(--teal);
+      color: white;
+    }
+
+    .footer-social svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .footer-links h4 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--text);
+    }
+
+    .footer-links a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 14px;
+      font-size: 0.95rem;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--teal);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .footer-bottom span {
+      color: var(--teal);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .feature-card.large {
+        grid-column: span 2;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 20px;
+        width: calc(100% - 32px);
+        top: 10px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      section {
+        padding: 80px 20px;
+      }
+
+      .hero {
+        padding: 100px 20px 60px;
+      }
+
+      .hero-floating {
+        display: none;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-card.large {
+        grid-column: span 1;
+        flex-direction: column;
+      }
+
+      .tracki-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .streak-badges {
+        position: static;
+        flex-direction: row;
+        justify-content: center;
+        transform: none;
+        margin-top: 30px;
+      }
+
+      /* Roadmap responsive */
+      .roadmap-steps {
+        flex-direction: column;
+        gap: 40px;
+      }
+
+      .roadmap-path,
+      .step-arrow {
+        display: none;
+      }
+
+      .roadmap-step {
+        max-width: 280px;
+        margin: 0 auto;
+      }
+
+      .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-container {
+        gap: 40px;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="#" class="nav-logo">
+      <img src="timetracker_icon.png" alt="TimeTracker Logo">
+      <span>TimeTracker</span>
+    </a>
+    
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#how">How it Works</a>
+      <a href="#reviews">Reviews</a>
+    </div>
+
+    <div class="nav-right">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <div class="theme-toggle-slider"></div>
+        <div class="theme-toggle-btn sun">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div class="theme-toggle-btn moon">
+          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </div>
+      </div>
+      <a href="#" class="nav-cta">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-shapes">
+      <div class="hero-shape hero-shape-1"></div>
+      <div class="hero-shape hero-shape-2"></div>
+      <div class="hero-shape hero-shape-3"></div>
+    </div>
+
+    <!-- Floating Elements -->
+    <div class="hero-floating floating-1">
+      <div class="floating-card">
+        <div class="floating-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="floating-text">+2.5 hours</div>
+          <div class="floating-subtext">tracked today</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-floating floating-2">
+      <div class="floating-card">
+        <div class="floating-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <div>
+          <div class="floating-text">Task Done!</div>
+          <div class="floating-subtext">12 remaining</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-floating floating-3">
+      <div class="floating-card">
+        <div class="floating-icon orange">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <div>
+          <div class="floating-text">5 online</div>
+          <div class="floating-subtext">team members</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-floating floating-4">
+      <div class="floating-card">
+        <div class="floating-icon pink">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <div class="floating-text">🔥 7 Day Streak</div>
+          <div class="floating-subtext">keep going!</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-floating floating-5">
+      <div class="floating-card">
+        <div class="floating-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div>
+          <div class="floating-text">Meeting in 30m</div>
+          <div class="floating-subtext">Team Sync</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-floating floating-6">
+      <div class="floating-card">
+        <div class="floating-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div>
+          <div class="floating-text">New message</div>
+          <div class="floating-subtext">from Anna</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-logo-big">
+        <img src="timetracker_icon.png" alt="TimeTracker">
+        <span>TimeTracker</span>
+      </div>
+      
+      <div class="hero-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        100% Free · No Ads · All Platforms
+      </div>
+      
+      <h1 class="hero-title">
+        Finally, a <span class="highlight">Project Platform</span><br>
+        for Productive Teams.
+      </h1>
+      
+      <p class="hero-subtitle">
+        Track time, manage tasks, chat with your team, and stay motivated with streaks.
+        All in one beautiful, cross-platform app.
+      </p>
+
+      <div class="hero-cta">
+        <button onclick="showDownloadOptions()" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Download Free
+        </button>
+        <a href="#features" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          See Features
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-container animate-on-scroll">
+      <div class="stat-item">
+        <div class="stat-number">1K+</div>
+        <div class="stat-label">Downloads</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">350</div>
+        <div class="stat-label">Active Users</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Platforms</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Free</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="features">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Features</div>
+      <h2 class="section-title">Everything your team needs to succeed</h2>
+      <p class="section-subtitle">
+        From time tracking to team chat, we've built every tool you need to stay productive and connected.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card large animate-on-scroll">
+        <div>
+          <div class="feature-icon teal">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+        </div>
+        <div>
+          <h3>Time Tracking</h3>
+          <p>Track your work hours privately and accurately. Automatic meeting time credit, detailed entries, and beautiful statistics.</p>
+          
+          <!-- Interactive Timer Demo - Matches Flutter App -->
+          <div class="timer-demo-app">
+            <div class="timer-display-app" id="timerDisplay">00:00:00</div>
+            <div class="timer-input-row">
+              <input type="text" class="timer-input" placeholder="What are you working on?" id="taskInput">
+              <div style="position: relative;">
+                <button class="timer-emoji-btn" id="emojiBtn" onclick="toggleProjectDropdown()">📁</button>
+                <div class="project-dropdown" id="projectDropdown">
+                  <div class="project-option" onclick="selectProject('📁', 'General')">
+                    <span class="emoji">📁</span> General
+                  </div>
+                  <div class="project-option" onclick="selectProject('💻', 'Development')">
+                    <span class="emoji">💻</span> Development
+                  </div>
+                  <div class="project-option" onclick="selectProject('🎨', 'Design')">
+                    <span class="emoji">🎨</span> Design
+                  </div>
+                  <div class="project-option" onclick="selectProject('📊', 'Marketing')">
+                    <span class="emoji">📊</span> Marketing
+                  </div>
+                  <div class="project-option" onclick="selectProject('📝', 'Meetings')">
+                    <span class="emoji">📝</span> Meetings
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="timer-buttons" id="timerButtons">
+              <button class="timer-action-btn primary" id="startBtn" onclick="animateButton(this); toggleTimer()">Start Tracking</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon purple">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>Team Chat</h3>
+        <p>Real-time messaging with your team. Share files, images, and react with emojis.</p>
+        <div class="feature-demo">
+          <div class="chat-demo" id="chatDemo">
+            <div class="chat-message received">Hey! How's the project going?</div>
+            <div class="chat-message sent">Almost done! 🎉</div>
+          </div>
+          <div class="chat-input-demo">
+            <input type="text" placeholder="Type a message..." id="chatInput" onkeypress="handleChatKeypress(event)">
+            <button class="chat-send-btn" onclick="sendChatMessage()">
+              <svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon orange">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+        </div>
+        <h3>Tasks & Subtasks</h3>
+        <p>Create tasks with due dates and subtasks. Sync across all devices.</p>
+        <div class="feature-demo">
+          <div class="task-demo">
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <span class="task-text">Design new landing page</span>
+            </div>
+            <div class="task-item completed" onclick="toggleTask(this)">
+              <div class="task-checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <span class="task-text">Set up project structure</span>
+            </div>
+            <div class="task-item" onclick="toggleTask(this)">
+              <div class="task-checkbox"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+              <span class="task-text">Implement dark mode</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon pink">
+          <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>Team Calendar</h3>
+        <p>All deadlines in one shared calendar view. Never miss a date.</p>
+        <div class="feature-demo">
+          <div class="calendar-demo" id="calendarDemo"></div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon teal">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>Analytics</h3>
+        <p>Beautiful charts showing your work time and progress.</p>
+        <div class="feature-demo">
+          <div class="analytics-demo" id="analyticsDemo"></div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon purple">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Team Management</h3>
+        <p>Create teams, invite members via QR code, and manage roles.</p>
+        <div class="feature-demo">
+          <div class="team-demo">
+            <div class="team-member">
+              <div class="team-avatar" style="background: linear-gradient(135deg, #009688, #4db6ac);">SM</div>
+              <div class="team-info"><span class="team-name">Sarah M.</span><span class="team-role">Admin</span></div>
+              <div class="team-status online"></div>
+            </div>
+            <div class="team-member">
+              <div class="team-avatar" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">JK</div>
+              <div class="team-info"><span class="team-name">James K.</span><span class="team-role">Member</span></div>
+              <div class="team-status online"></div>
+            </div>
+            <div class="team-member">
+              <div class="team-avatar" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">ER</div>
+              <div class="team-info"><span class="team-name">Emma R.</span><span class="team-role">Member</span></div>
+              <div class="team-status offline"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon orange">
+          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        <h3>Smart Notifications</h3>
+        <p>Stay informed with intelligent push notifications for chat and tasks.</p>
+        <div class="feature-demo">
+          <div class="notification-demo" id="notificationDemo">
+            <div class="notification-item">
+              <div class="notif-icon-box chat">💬</div>
+              <div class="notif-content"><strong>New message</strong><span>Anna: Hey, the design looks great!</span></div>
+              <span class="notif-time">2m</span>
+            </div>
+            <div class="notification-item">
+              <div class="notif-icon-box task">✓</div>
+              <div class="notif-content"><strong>Task completed</strong><span>James finished "Setup API"</span></div>
+              <span class="notif-time">15m</span>
+            </div>
+            <div class="notification-item">
+              <div class="notif-icon-box reminder">🔔</div>
+              <div class="notif-content"><strong>Reminder</strong><span>Team meeting in 30 minutes</span></div>
+              <span class="notif-time">28m</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon pink">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>Home Widgets</h3>
+        <p>Track time, see entries, and get motivated - all from your home screen.</p>
+        <div class="feature-demo">
+          <div class="widget-demo">
+            <div class="mini-widget tracking">
+              <div class="widget-label">⏱️ Tracking</div>
+              <div class="widget-time">01:24:35</div>
+              <div class="widget-task">Website Redesign</div>
+            </div>
+            <div class="mini-widget motivation">
+              <div class="widget-label">🔥 Tracki</div>
+              <div class="widget-streak">7 Day Streak!</div>
+              <div class="widget-msg">Keep it up! 💪</div>
+            </div>
+          </div>
+          <div class="widget-divider-vertical"></div>
+          <div class="widget-demo" style="grid-column: 1 / -1;">
+            <div class="mini-widget entries" style="grid-column: span 2;">
+              <div class="widget-label">📋 Last Entry</div>
+              <div class="last-entries-mini">
+                <div class="last-entry-item">
+                  <div class="widget-last-entry">Design Update</div>
+                  <div class="widget-last-time">45m ago</div>
+                </div>
+                <div class="last-entry-item">
+                  <div class="widget-last-entry">Team Meeting</div>
+                  <div class="widget-last-time">2h ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COMMENTED OUT: Meeting Tracker
+      <div class="feature-card small animate-on-scroll">
+        <div class="feature-icon teal">
+          <svg viewBox="0 0 24 24"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>Meeting Tracker</h3>
+        <p>Auto-credit meeting time. One tap to add any scheduled meeting.</p>
+        <div class="feature-demo">
+          <div class="meeting-demo">
+            <div class="meeting-form">
+              <div class="form-group">
+                <label>Title</label>
+                <input type="text" value="Team Standup" readonly>
+              </div>
+              <div class="form-group">
+                <label>Time</label>
+                <input type="text" value="10:00 AM - 10:30 AM" readonly>
+              </div>
+              <div class="form-group">
+                <label>Room</label>
+                <input type="text" value="Conference A" readonly>
+              </div>
+              <div class="form-group">
+                <label>Attendees</label>
+                <div class="attendees-list">
+                  <span class="attendee" style="background: linear-gradient(135deg, #009688, #4db6ac);">SM</span>
+                  <span class="attendee" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">JK</span>
+                  <span class="attendee" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">ER</span>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width: 100%; margin-top: 8px; font-size: 0.9rem; padding: 8px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 16px; height: 16px;"><path d="M12 5v14M5 12h14"/></svg>
+                Add to Calendar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      -->
+
+      <!-- COMMENTED OUT: Last Entries
+      <div class="feature-card small animate-on-scroll">
+        <div class="feature-icon orange">
+          <svg viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+        </div>
+        <h3>Last Entries</h3>
+        <p>Your recent time tracking activities at a glance.</p>
+        <div class="feature-demo">
+          <div class="last-entries-list">
+            <div class="entry-item">
+              <div class="entry-time">10:30 - 11:45</div>
+              <div class="entry-title">Website Redesign</div>
+              <div class="entry-duration">1h 15m</div>
+            </div>
+            <div class="entry-item">
+              <div class="entry-time">09:00 - 10:15</div>
+              <div class="entry-title">Client Meeting</div>
+              <div class="entry-duration">1h 15m</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      -->
+    </div>
+  </section>
+
+  <!-- TRACKI SECTION -->
+  <section class="tracki-section" id="tracki">
+    <div class="tracki-container">
+      <div class="tracki-visual animate-on-scroll">
+        <div class="tracki-image-wrapper">
+          <div class="tracki-glow"></div>
+          <img src="tracki_mascot.png" alt="Tracki Mascot">
+          
+          <div class="streak-badges">
+            <div class="streak-badge">
+              <span class="streak-fire">🔥</span> 7 Day Streak!
+            </div>
+            <div class="streak-badge">
+              <span class="streak-star">⭐</span> New Record!
+            </div>
+            <div class="streak-badge">
+              <span class="streak-ice">❄️</span> Stay warm!
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tracki-content animate-on-scroll">
+        <h2>Meet Tracki — Your Motivation Buddy</h2>
+        <p>
+          Tracki cheers you on every day! Build streaks, break personal records, and get motivated with daily messages. The longer your streak, the happier Tracki gets.
+        </p>
+        
+        <div class="streak-progress">
+          <div class="streak-dot active"></div>
+          <div class="streak-dot active"></div>
+          <div class="streak-dot active"></div>
+          <div class="streak-dot active"></div>
+          <div class="streak-dot active"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+        </div>
+        
+        <a href="#" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          Start Your Streak
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS - VISUAL JOURNEY -->
+  <section class="how-section" id="how">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">✨ Get Started</div>
+      <h2 class="section-title">Ready in 3 simple steps</h2>
+      <p class="section-subtitle">
+        No complicated setup. Just download, sign in, and start tracking.
+      </p>
+    </div>
+
+    <div class="journey-container animate-on-scroll">
+      <div class="journey-step">
+        <div class="journey-number">1</div>
+        <div class="journey-card">
+          <div class="journey-icon">
+            <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          </div>
+          <h3>Download</h3>
+          <p>Get TimeTracker on iOS or Android — it's free!</p>
+          <div class="journey-emoji">📱</div>
+        </div>
+      </div>
+
+      <div class="journey-step">
+        <div class="journey-number">2</div>
+        <div class="journey-card">
+          <div class="journey-icon">
+            <svg viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          </div>
+          <h3>Sign In</h3>
+          <p>One tap with Google. No forms, no hassle.</p>
+          <div class="journey-emoji">⚡</div>
+        </div>
+      </div>
+
+      <div class="journey-step last">
+        <div class="journey-number">3</div>
+        <div class="journey-card highlight">
+          <div class="journey-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <h3>Track!</h3>
+          <p>Start your timer and build your streak!</p>
+          <div class="journey-emoji">🚀</div>
+        </div>
+      </div>
+
+      <!-- SVG gradient definition -->
+      <svg width="0" height="0">
+        <defs>
+          <linearGradient id="journeyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#009688"/>
+            <stop offset="100%" style="stop-color:#7c3aed"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section" id="reviews">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Reviews</div>
+      <h2 class="section-title">Loved by teams worldwide</h2>
+      <p class="section-subtitle">
+        See what our users have to say about their experience with TimeTracker.
+      </p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">
+          "TimeTracker completely changed how our remote team collaborates. The streak system keeps everyone motivated!"
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">SM</div>
+          <div class="testimonial-info">
+            <h4>Sarah Miller</h4>
+            <span>Product Manager, TechCorp</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">
+          "Finally an app that's actually free with no hidden costs. Tracki is adorable and my team loves the streaks!"
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">JK</div>
+          <div class="testimonial-info">
+            <h4>James Kim</h4>
+            <span>Freelance Developer</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card animate-on-scroll">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">
+          "The analytics are incredibly useful. I can finally see where my time goes and optimize my workday."
+        </p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">ER</div>
+          <div class="testimonial-info">
+            <h4>Emma Rodriguez</h4>
+            <span>Startup Founder</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PLATFORMS -->
+  <section class="platforms-section">
+    <div class="section-header animate-on-scroll">
+      <div class="section-tag">Platforms</div>
+      <h2 class="section-title">Available everywhere</h2>
+      <p class="section-subtitle">
+        Use TimeTracker on any device. Your data syncs instantly across all platforms.
+      </p>
+    </div>
+
+    <div class="platform-icons animate-on-scroll">
+      <div class="platform available">
+        <div class="platform-icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        </div>
+        <span>iOS</span>
+        <div class="platform-badge available">Available</div>
+      </div>
+      <div class="platform available">
+        <div class="platform-icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M17.523 2c-.477.001-.949.07-1.405.206C14.832 2.56 13.695 3.608 13 5c-.695-1.392-1.832-2.44-3.118-2.794C9.046 1.966 8.114 1.968 7.26 2.2 5.162 2.758 3.623 4.597 3.112 6.82c-.476 2.067-.096 4.348.987 6.357 1.084 2.012 2.827 3.74 4.954 4.894.702.38 1.434.654 2.166.854v3.075a1 1 0 001 1h.002a1 1 0 00.998-1.002l-.003-3.068c.742-.196 1.485-.471 2.195-.86 2.136-1.17 3.877-2.916 4.952-4.944 1.072-2.024 1.439-4.315.952-6.384C20.804 4.517 19.252 2.654 17.132 2.098 17.263 2.034 17.393 2 17.523 2zM7.5 8a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm9 0a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM6 0a1 1 0 00-.707.293l-2 2a1 1 0 101.414 1.414L6 2.414l1.293 1.293a1 1 0 001.414-1.414l-2-2A1 1 0 006 0zm12 0a1 1 0 00-.707.293l-2 2a1 1 0 101.414 1.414L18 2.414l1.293 1.293a1 1 0 001.414-1.414l-2-2A1 1 0 0018 0z"/></svg>
+        </div>
+        <span>Android</span>
+        <div class="platform-badge available">Available</div>
+      </div>
+      <div class="platform coming-soon">
+        <div class="platform-icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M3 5.5h8v8H3v-8zm10 0h8v8h-8v-8zM3 15.5h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>
+        </div>
+        <span>Windows</span>
+        <div class="platform-badge soon">Coming Soon</div>
+      </div>
+      <div class="platform coming-soon">
+        <div class="platform-icon-wrapper">
+          <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        </div>
+        <span>macOS</span>
+        <div class="platform-badge soon">Coming Soon</div>
+      </div>
+      <div class="platform coming-soon">
+        <div class="platform-icon-wrapper">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/><line x1="2" y1="12" x2="22" y2="12" stroke="currentColor" stroke-width="2"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" fill="none" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <span>Web</span>
+        <div class="platform-badge soon">Coming Soon</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD MODAL -->
+  <div class="download-modal" id="downloadModal">
+    <div class="download-modal-content">
+      <div class="download-modal-header">
+        <h2>Download TimeTracker</h2>
+        <p>Choose your platform and get started today</p>
+      </div>
+      
+      <div class="download-options">
+        <a href="https://apps.apple.com" target="_blank" class="download-option" title="Download on App Store">
+          <div class="download-option-icon">🍎</div>
+          <div class="download-option-info">
+            <h3>iOS App Store</h3>
+            <p>Get it on iPhone & iPad</p>
+          </div>
+          <span style="margin-left: auto; color: var(--teal);">→</span>
+        </a>
+        
+        <a href="https://play.google.com/store/apps" target="_blank" class="download-option" title="Download on Google Play">
+          <div class="download-option-icon">🤖</div>
+          <div class="download-option-info">
+            <h3>Google Play Store</h3>
+            <p>Get it on Android devices</p>
+          </div>
+          <span style="margin-left: auto; color: var(--teal);">→</span>
+        </a>
+        
+        <a href="https://www.microsoft.com/store/apps" target="_blank" class="download-option" title="Download on Microsoft Store">
+          <div class="download-option-icon">🪟</div>
+          <div class="download-option-info">
+            <h3>Microsoft Store</h3>
+            <p>Coming Soon for Windows</p>
+          </div>
+          <span style="margin-left: auto; color: var(--text-secondary);">🔒</span>
+        </a>
+        
+        <a href="https://www.macappstore.org" target="_blank" class="download-option" title="Download on Mac App Store">
+          <div class="download-option-icon">🍎</div>
+          <div class="download-option-info">
+            <h3>Mac App Store</h3>
+            <p>Coming Soon for macOS</p>
+          </div>
+          <span style="margin-left: auto; color: var(--text-secondary);">🔒</span>
+        </a>
+      </div>
+
+      <div class="download-modal-close">
+        <button onclick="closeDownloadModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-content footer-minimal">
+      <div class="footer-brand">
+        <div class="footer-logo">
+          <img src="timetracker_icon.png" alt="TimeTracker">
+          <span>TimeTracker</span>
+        </div>
+        <p>100% Free. No ads. All platforms.</p>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Product</h4>
+        <a href="#features">Features</a>
+        <a href="#how">How it Works</a>
+        <a href="#reviews">Reviews</a>
+      </div>
+      
+      <div class="footer-links">
+        <h4>Legal</h4>
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>© 2026 TimeTracker · Made with <span>♥</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // ============ DOWNLOAD MODAL ============
+    function showDownloadOptions() {
+      document.getElementById('downloadModal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDownloadModal() {
+      document.getElementById('downloadModal').classList.remove('show');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Close modal when clicking outside
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('downloadModal');
+      if (modal) {
+        modal.addEventListener('click', (e) => {
+          if (e.target === modal) {
+            closeDownloadModal();
+          }
+        });
+      }
+      // Close on Escape key
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeDownloadModal();
+        }
+      });
+    });
+
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    // ============ TIMER (Flutter App Style) ============
+    let timerInterval = null;
+    let timerSeconds = 0;
+    let isRunning = false;
+    let isPaused = false;
+
+    function formatTime(totalSeconds) {
+      const h = Math.floor(totalSeconds / 3600);
+      const m = Math.floor((totalSeconds % 3600) / 60);
+      const s = totalSeconds % 60;
+      return [h, m, s].map(v => v.toString().padStart(2, '0')).join(':');
+    }
+
+    function updateDisplay() {
+      document.getElementById('timerDisplay').textContent = formatTime(timerSeconds);
+    }
+
+    function animateButton(btn) {
+      btn.classList.add('clicked');
+      setTimeout(() => btn.classList.remove('clicked'), 400);
+    }
+
+    // Project dropdown
+    function toggleProjectDropdown() {
+      const dropdown = document.getElementById('projectDropdown');
+      dropdown.classList.toggle('show');
+    }
+
+    function selectProject(emoji, name) {
+      document.getElementById('emojiBtn').textContent = emoji;
+      document.getElementById('taskInput').placeholder = `Working on ${name}...`;
+      document.getElementById('projectDropdown').classList.remove('show');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.timer-emoji-btn') && !e.target.closest('.project-dropdown')) {
+        const dropdown = document.getElementById('projectDropdown');
+        if (dropdown) dropdown.classList.remove('show');
+      }
+    });
+
+    function toggleTimer() {
+      const buttonsDiv = document.getElementById('timerButtons');
+      const display = document.getElementById('timerDisplay');
+      
+      if (!isRunning && !isPaused) {
+        // Start tracking
+        isRunning = true;
+        display.classList.add('running');
+        timerInterval = setInterval(() => { timerSeconds++; updateDisplay(); }, 1000);
+        buttonsDiv.innerHTML = `
+          <button class="timer-action-btn pause" onclick="animateButton(this); pauseTimer()">Pause</button>
+          <button class="timer-action-btn stop" onclick="animateButton(this); stopTimer()">Stop</button>
+          <button class="timer-action-btn cancel" onclick="animateButton(this); cancelTimer()">Cancel</button>
+        `;
+      }
+    }
+
+    function pauseTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      isPaused = true;
+      const display = document.getElementById('timerDisplay');
+      display.classList.remove('running');
+      const buttonsDiv = document.getElementById('timerButtons');
+      buttonsDiv.innerHTML = `
+        <button class="timer-action-btn resume" onclick="animateButton(this); resumeTimer()">Resume</button>
+        <button class="timer-action-btn stop" onclick="animateButton(this); stopTimer()">Stop</button>
+        <button class="timer-action-btn cancel" onclick="animateButton(this); cancelTimer()">Cancel</button>
+      `;
+    }
+
+    function resumeTimer() {
+      isRunning = true;
+      isPaused = false;
+      const display = document.getElementById('timerDisplay');
+      display.classList.add('running');
+      timerInterval = setInterval(() => { timerSeconds++; updateDisplay(); }, 1000);
+      const buttonsDiv = document.getElementById('timerButtons');
+      buttonsDiv.innerHTML = `
+        <button class="timer-action-btn pause" onclick="animateButton(this); pauseTimer()">Pause</button>
+        <button class="timer-action-btn stop" onclick="animateButton(this); stopTimer()">Stop</button>
+        <button class="timer-action-btn cancel" onclick="animateButton(this); cancelTimer()">Cancel</button>
+      `;
+    }
+
+    function stopTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      isPaused = false;
+      
+      const timerDemo = document.querySelector('.timer-demo-app');
+      const display = document.getElementById('timerDisplay');
+      const buttonsDiv = document.getElementById('timerButtons');
+      
+      // Remove running animation
+      display.classList.remove('running');
+      
+      // Save the current entry
+      const currentEntry = {
+        title: document.getElementById('taskInput').value || 'Untitled',
+        duration: formatTime(timerSeconds),
+        seconds: timerSeconds,
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      
+      // Add to entries list (keep last 10)
+      if (!window.timerEntries) window.timerEntries = [];
+      window.timerEntries.unshift(currentEntry);
+      if (window.timerEntries.length > 10) window.timerEntries.pop();
+      
+      // Success animation
+      timerDemo.classList.add('success');
+      display.style.color = '#22c55e';
+      
+      // Show entries list for 5 seconds
+      const savedTime = formatTime(timerSeconds);
+      const entriesList = window.timerEntries.slice(0, 3).map(entry => 
+        `<div style="padding: 8px; border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div style="font-weight: 600; color: var(--text); font-size: 0.85rem;">${entry.title}</div>
+            <div style="font-size: 0.7rem; color: var(--text-secondary);">${entry.time}</div>
+          </div>
+          <div style="font-weight: 600; color: var(--teal); font-size: 0.85rem;">${entry.duration}</div>
+        </div>`
+      ).join('');
+      
+      buttonsDiv.innerHTML = `
+        <div style="background: var(--bg-secondary); border-radius: 12px; border: 1px solid var(--card-border); overflow: hidden; margin-bottom: 12px;">
+          <div style="padding: 10px 12px; background: rgba(0, 150, 136, 0.1); font-weight: 600; font-size: 0.8rem; color: var(--teal);">✓ ${savedTime} saved</div>
+          ${entriesList}
+        </div>
+        <button class="timer-action-btn primary" onclick="animateButton(this); resetTimerAfterStop()" style="width: 100%;">New Entry</button>
+      `;
+      
+      // Create confetti
+      createConfetti(timerDemo);
+      
+      setTimeout(() => {
+        resetTimerAfterStop();
+      }, 5000);
+    }
+
+    function resetTimerAfterStop() {
+      timerSeconds = 0;
+      updateDisplay();
+      const display = document.getElementById('timerDisplay');
+      const timerDemo = document.querySelector('.timer-demo-app');
+      display.style.color = '';
+      timerDemo.classList.remove('success');
+      const buttonsDiv = document.getElementById('timerButtons');
+      buttonsDiv.innerHTML = `<button class="timer-action-btn primary" onclick="animateButton(this); toggleTimer()">Start Tracking</button>`;
+    }
+
+    function createConfetti(container) {
+      const colors = ['#009688', '#7c3aed', '#f59e0b', '#ec4899', '#22c55e'];
+      for (let i = 0; i < 12; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '50%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 0.3 + 's';
+        container.style.position = 'relative';
+        container.appendChild(confetti);
+        setTimeout(() => confetti.remove(), 1200);
+      }
+    }
+
+    function cancelTimer() {
+      clearInterval(timerInterval);
+      isRunning = false;
+      isPaused = false;
+      timerSeconds = 0;
+      const display = document.getElementById('timerDisplay');
+      display.classList.remove('running');
+      updateDisplay();
+      const buttonsDiv = document.getElementById('timerButtons');
+      buttonsDiv.innerHTML = `<button class="timer-action-btn primary" onclick="animateButton(this); toggleTimer()">Start Tracking</button>`;
+    }
+
+    // ============ CHAT DEMO ============
+    function getSmartReply(message) {
+      const msg = message.toLowerCase();
+      
+      // Question detection
+      if (msg.includes('?')) {
+        const questionReplies = [
+          '🤔 Good question!',
+          'Let me think about that...',
+          'Great point! 💡',
+          'Interesting! 🎯',
+          'That\'s something I can help with!'
+        ];
+        return questionReplies[Math.floor(Math.random() * questionReplies.length)];
+      }
+      
+      // Greeting detection
+      if (msg.match(/^(hey|hi|hello|yo|sup|wassup)/)) {
+        const greetings = [
+          'Hey! 👋 How\'s it going?',
+          'Hi there! 😊',
+          'Yo! What\'s up?',
+          'Hey! Good to see you! ✨'
+        ];
+        return greetings[Math.floor(Math.random() * greetings.length)];
+      }
+      
+      // Thanks detection
+      if (msg.includes('thanks') || msg.includes('thank you') || msg.includes('thx')) {
+        const thanks = [
+          'My pleasure! 😊',
+          'Anytime! 👍',
+          'Happy to help! 🚀',
+          'You got it!'
+        ];
+        return thanks[Math.floor(Math.random() * thanks.length)];
+      }
+      
+      // Urgent/Priority detection
+      if (msg.includes('urgent') || msg.includes('asap') || msg.includes('now') || msg.includes('emergency')) {
+        const urgent = [
+          'On it right away! 🚀',
+          'Coming right up!',
+          'Already working on it! ⚡',
+          'Top priority! 💨'
+        ];
+        return urgent[Math.floor(Math.random() * urgent.length)];
+      }
+      
+      // Problem/Issue detection
+      if (msg.includes('problem') || msg.includes('issue') || msg.includes('bug') || msg.includes('error') || msg.includes('broken')) {
+        const problems = [
+          'Let me check that out 🔍',
+          'I\'ll look into it right away',
+          'Found it! Let me fix this 🛠️',
+          'I\'m on it! 💪'
+        ];
+        return problems[Math.floor(Math.random() * problems.length)];
+      }
+      
+      // Positive feedback detection
+      if (msg.includes('great') || msg.includes('awesome') || msg.includes('perfect') || msg.includes('love') || msg.includes('amazing')) {
+        const positive = [
+          'Awesome! 🎉',
+          'That\'s great to hear! 😊',
+          'Right on! 👏',
+          'Love the energy! ✨',
+          'Yes! That\'s the spirit! 🔥'
+        ];
+        return positive[Math.floor(Math.random() * positive.length)];
+      }
+      
+      // Default smart replies
+      const defaultReplies = [
+        'Got it! 👍',
+        'Makes sense! 💡',
+        'Sure thing! ✓',
+        'Absolutely! 🎯',
+        'I hear you! 👂',
+        'Perfect! 🚀',
+        'That works! ✨'
+      ];
+      return defaultReplies[Math.floor(Math.random() * defaultReplies.length)];
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      
+      const chat = document.getElementById('chatDemo');
+      const msg = document.createElement('div');
+      msg.className = 'chat-message sent';
+      msg.textContent = text;
+      chat.appendChild(msg);
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+      
+      // Show typing indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'chat-message received';
+      typingDiv.innerHTML = '<span style="opacity: 0.6;">typing...</span>';
+      chat.appendChild(typingDiv);
+      chat.scrollTop = chat.scrollHeight;
+      
+      setTimeout(() => {
+        typingDiv.remove();
+        const reply = document.createElement('div');
+        reply.className = 'chat-message received';
+        reply.textContent = getSmartReply(text);
+        chat.appendChild(reply);
+        chat.scrollTop = chat.scrollHeight;
+      }, 600 + Math.random() * 400);
+    }
+
+    function handleChatKeypress(e) {
+      if (e.key === 'Enter') sendChatMessage();
+    }
+
+    // ============ TASK DEMO ============
+    function toggleTask(el) {
+      el.classList.toggle('completed');
+    }
+
+    // ============ CALENDAR DEMO ============
+    function initCalendar() {
+      const cal = document.getElementById('calendarDemo');
+      if (!cal) return;
+      const today = new Date().getDate();
+      const eventDays = [today + 2, today + 5, today - 1];
+      
+      for (let i = 1; i <= 28; i++) {
+        const day = document.createElement('div');
+        day.className = 'calendar-day';
+        day.textContent = i;
+        if (i === today) day.classList.add('today');
+        if (eventDays.includes(i) && i > 0 && i <= 28) day.classList.add('event');
+        day.onclick = () => day.classList.toggle('event');
+        cal.appendChild(day);
+      }
+    }
+
+    // ============ ANALYTICS DEMO ============
+    const analyticsData = [
+      { h: 40, label: '2.5h' },
+      { h: 65, label: '4h' },
+      { h: 50, label: '3h' },
+      { h: 80, label: '5h' },
+      { h: 35, label: '2h' },
+      { h: 90, label: '6h' },
+      { h: 55, label: '3.5h' }
+    ];
+    const analyticsDays = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    function animateAnalyticsBars(barsContainer) {
+      const bars = barsContainer.querySelectorAll('.analytics-bar');
+      bars.forEach((bar, i) => {
+        // Reset height first
+        bar.style.height = '0';
+        // Get the target height from data attribute
+        const targetHeight = analyticsData[i].h;
+        // Animate with staggered delay
+        setTimeout(() => { 
+          bar.style.height = targetHeight + '%'; 
+        }, 200 + i * 120);
+      });
+    }
+
+    function initAnalytics() {
+      const container = document.getElementById('analyticsDemo');
+      if (!container) return;
+      
+      // Create bars container
+      const barsContainer = document.createElement('div');
+      barsContainer.className = 'analytics-bars';
+      
+      analyticsData.forEach((d, i) => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'analytics-bar-wrapper';
+        wrapper.style.cursor = 'pointer';
+        
+        const barInner = document.createElement('div');
+        barInner.className = 'analytics-bar-inner';
+        
+        const bar = document.createElement('div');
+        bar.className = 'analytics-bar';
+        bar.style.height = '0';
+        bar.setAttribute('data-value', d.label);
+        bar.setAttribute('data-target-height', d.h);
+        bar.title = analyticsDays[i] + ': ' + d.label;
+        
+        const dayLabel = document.createElement('div');
+        dayLabel.className = 'analytics-day';
+        dayLabel.textContent = analyticsDays[i];
+        
+        barInner.appendChild(bar);
+        wrapper.appendChild(barInner);
+        wrapper.appendChild(dayLabel);
+        
+        // Add hover replay
+        wrapper.addEventListener('mouseover', () => {
+          animateAnalyticsBars(barsContainer);
+        });
+        
+        barsContainer.appendChild(wrapper);
+      });
+      
+      container.appendChild(barsContainer);
+      container.dataset.analyticsContainer = 'true';
+      
+      // Add summary row
+      const summary = document.createElement('div');
+      summary.className = 'analytics-summary';
+      summary.innerHTML = `
+        <div class="analytics-summary-item">
+          <span class="analytics-summary-value">26h</span>
+          <span class="analytics-summary-label">This Week</span>
+        </div>
+        <div class="analytics-summary-item">
+          <span class="analytics-summary-value">3.7h</span>
+          <span class="analytics-summary-label">Daily Avg</span>
+        </div>
+        <div class="analytics-summary-item">
+          <span class="analytics-summary-value">+12%</span>
+          <span class="analytics-summary-label">vs Last Week</span>
+        </div>
+      `;
+      container.appendChild(summary);
+    }
+
+    // Setup Intersection Observer for analytics scroll trigger
+    const analyticsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.dataset.analyticsAnimated) {
+          entry.target.dataset.analyticsAnimated = 'true';
+          // Initialize analytics when it comes into view
+          initAnalytics();
+          // Animate bars immediately
+          const barsContainer = entry.target.querySelector('.analytics-bars');
+          if (barsContainer) {
+            animateAnalyticsBars(barsContainer);
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe analytics container on page load
+    window.addEventListener('load', () => {
+      const analyticsContainer = document.getElementById('analyticsDemo');
+      if (analyticsContainer && !analyticsContainer.dataset.analyticsContainer) {
+        analyticsObserver.observe(analyticsContainer);
+      }
+    });
+
+    // ============ NOTIFICATIONS SCROLL TRIGGER ============
+    function animateNotifications(container) {
+      const items = container.querySelectorAll('.notification-item');
+      items.forEach((item, i) => {
+        // Remove previous animation class
+        item.classList.remove('animating');
+        // Trigger reflow to restart animation
+        void item.offsetWidth;
+        // Add animation class
+        item.classList.add('animating');
+      });
+    }
+
+    const notificationsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !entry.target.dataset.notificationsAnimated) {
+          entry.target.dataset.notificationsAnimated = 'true';
+          animateNotifications(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    // Observe notifications container on page load
+    window.addEventListener('load', () => {
+      const notificationDemo = document.getElementById('notificationDemo');
+      if (notificationDemo) {
+        notificationsObserver.observe(notificationDemo);
+        // Add hover replay
+        notificationDemo.addEventListener('mouseover', () => {
+          animateNotifications(notificationDemo);
+        });
+      }
+    });
+
+    // ============ SCROLL ANIMATIONS ============
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          // Animate roadmap path when visible
+          const roadmapPath = entry.target.querySelector('.roadmap-path');
+          if (roadmapPath) {
+            setTimeout(() => roadmapPath.classList.add('animate'), 300);
+          }
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      const navbar = document.querySelector('.navbar');
+      navbar.style.boxShadow = window.pageYOffset > 100 ? '0 4px 30px rgba(0,0,0,0.1)' : 'none';
+    });
+
+    // Streak dots with Tracki speech bubble
+    let currentStreak = 5;
+    
+    function showTrackiReaction(isGain) {
+      const wrapper = document.querySelector('.tracki-image-wrapper');
+      const activeDots = document.querySelectorAll('.streak-dot.active').length;
+      
+      // Remove existing speech bubble
+      const existingBubble = wrapper.querySelector('.tracki-speech-bubble');
+      if (existingBubble) existingBubble.remove();
+      
+      wrapper.classList.remove('happy', 'sad', 'reacting');
+      
+      // Add reacting animation
+      wrapper.classList.add('reacting');
+      
+      // Create speech bubble
+      const bubble = document.createElement('div');
+      bubble.className = 'tracki-speech-bubble';
+      
+      let emoji, message;
+      if (activeDots >= 5) {
+        wrapper.classList.add('happy');
+        emoji = '🤩';
+        message = isGain ? 'Amazing!' : 'Keep going!';
+      } else if (activeDots >= 3) {
+        emoji = '😊';
+        message = isGain ? 'Great job!' : 'Almost there!';
+      } else if (activeDots >= 1) {
+        emoji = '🙂';
+        message = isGain ? 'Nice start!' : 'Don\'t give up!';
+      } else {
+        wrapper.classList.add('sad');
+        emoji = '😢';
+        message = 'Start tracking!';
+      }
+      
+      bubble.innerHTML = `<span class="emoji">${emoji}</span><span class="message">${message}</span>`;
+      wrapper.appendChild(bubble);
+      
+      // Remove after animation
+      setTimeout(() => {
+        bubble.style.opacity = '0';
+        bubble.style.transform = 'scale(0.8) translateY(-10px)';
+        bubble.style.transition = 'all 0.3s ease';
+        setTimeout(() => bubble.remove(), 300);
+        wrapper.classList.remove('reacting');
+      }, 2500);
+    }
+
+    document.querySelectorAll('.streak-dot').forEach(dot => {
+      dot.style.cursor = 'pointer';
+      dot.onclick = () => {
+        const wasActive = dot.classList.contains('active');
+        dot.classList.toggle('active');
+        dot.style.transform = dot.classList.contains('active') ? 'scale(1.3)' : 'scale(1)';
+        setTimeout(() => dot.style.transform = 'scale(1)', 200);
+        showTrackiReaction(!wasActive);
+      };
+    });
+
+    // Init demos
+    document.addEventListener('DOMContentLoaded', () => {
+      initCalendar();
+      // Analytics will be initialized when scrolling into view
+      const analyticsContainer = document.getElementById('analyticsDemo');
+      if (analyticsContainer) {
+        analyticsObserver.observe(analyticsContainer);
+      }
+    });
+  </script>
+
+</body>
+</html>
