@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Terms of Service – TimeTracker</title>
+  <meta name="description" content="TimeTracker Terms of Service - Legal terms and conditions for using our app.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --teal: #009688;
+      --teal-dark: #00796b;
+      --teal-light: #4db6ac;
+      --purple: #7c3aed;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --card-bg: #fff;
+      --card-border: #e2e8f0;
+      --shadow: rgba(0, 150, 136, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg-secondary: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 150, 136, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] .navbar {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.3s;
+    }
+
+    .nav-logo:hover {
+      transform: scale(1.03);
+    }
+
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+
+    .nav-logo span {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      width: 60px;
+      height: 32px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle-slider {
+      width: 28px;
+      height: 28px;
+      background: var(--teal);
+      border-radius: 12px;
+      transition: transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle-btn {
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+
+    .theme-toggle-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .theme-toggle-btn.sun {
+      display: flex;
+      opacity: 0;
+      position: absolute;
+    }
+
+    [data-theme="dark"] .theme-toggle-btn.sun {
+      opacity: 1;
+      position: relative;
+    }
+
+    .theme-toggle-btn.moon {
+      display: flex;
+      opacity: 1;
+      position: relative;
+    }
+
+    [data-theme="dark"] .theme-toggle-btn.moon {
+      opacity: 0;
+      position: absolute;
+    }
+
+    /* Content */
+    .policy-container {
+      max-width: 900px;
+      margin: 120px auto 60px;
+      padding: 0 24px;
+    }
+
+    .policy-header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .policy-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .policy-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .policy-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      line-height: 1.8;
+    }
+
+    .policy-content h2 {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      color: var(--teal);
+    }
+
+    .policy-content h3 {
+      font-size: 1.1rem;
+      margin-top: 20px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .policy-content p {
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+    }
+
+    .policy-content ul {
+      margin: 16px 0 16px 24px;
+      color: var(--text-secondary);
+    }
+
+    .policy-content li {
+      margin-bottom: 8px;
+    }
+
+    .policy-content a {
+      color: var(--teal);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .policy-content a:hover {
+      color: var(--teal-dark);
+      text-decoration: underline;
+    }
+
+    .policy-content hr {
+      margin: 32px 0;
+      border: none;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .policy-content strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--teal-dark);
+      transform: translateX(-4px);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--card-border);
+      padding: 40px 24px 20px;
+      margin-top: 60px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .navbar {
+        width: calc(100% - 24px);
+        top: 8px;
+        left: 12px;
+        right: 12px;
+        transform: none;
+        max-width: none;
+        border-radius: 14px;
+        padding: 12px 16px;
+      }
+
+      .nav-logo span {
+        display: none;
+      }
+
+      .policy-container {
+        margin-top: 90px;
+        padding: 0 16px;
+      }
+
+      .policy-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .policy-content {
+        padding: 24px;
+      }
+
+      .policy-content h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .policy-container {
+        margin-top: 80px;
+        padding: 0 16px;
+      }
+
+      .policy-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .policy-header p {
+        font-size: 0.9rem;
+      }
+
+      .policy-content {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .policy-content h2 {
+        font-size: 1.2rem;
+        margin-top: 24px;
+      }
+
+      .policy-content ul {
+        margin-left: 16px;
+      }
+
+      footer {
+        padding: 24px 16px 16px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="timetracker_icon.png" alt="TimeTracker Logo">
+      <span>TimeTracker</span>
+    </a>
+
+    <div class="nav-right">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <div class="theme-toggle-slider"></div>
+        <div class="theme-toggle-btn sun">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div class="theme-toggle-btn moon">
+          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="policy-container">
+    <a href="index.html" class="back-link">← Back to Home</a>
+
+    <div class="policy-header">
+      <h1>Terms of Service</h1>
+      <p>Last Updated: January 2026</p>
+    </div>
+
+    <div class="policy-content">
+      <p><strong>These terms and conditions apply to the TimeTracker app (hereby referred to as "Application") for mobile devices that was created by Simon Kroismayr (hereby referred to as "Service Provider") as a Free service.</strong></p>
+
+      <p>Upon downloading or utilizing the Application, you are automatically agreeing to the following terms. It is strongly advised that you thoroughly read and understand these terms prior to using the Application.</p>
+
+      <h2>1. Intellectual Property</h2>
+      <p>Unauthorized copying, modification of the Application, any part of the Application, or our trademarks is strictly prohibited. Any attempts to extract the source code of the Application, translate the Application into other languages, or create derivative versions are not permitted. All trademarks, copyrights, database rights, and other intellectual property rights related to the Application remain the property of the Service Provider.</p>
+
+      <h2>2. Modifications and Fees</h2>
+      <p>The Service Provider is dedicated to ensuring that the Application is as beneficial and efficient as possible. As such, they reserve the right to modify the Application or charge for their services at any time and for any reason. The Service Provider assures you that any charges for the Application or its services will be clearly communicated to you.</p>
+
+      <h2>3. Security and Device Safety</h2>
+      <p>The Application stores and processes personal data that you have provided to the Service Provider in order to provide the Service. It is your responsibility to maintain the security of your phone and access to the Application. The Service Provider strongly advise against jailbreaking or rooting your phone, which involves removing software restrictions and limitations imposed by the official operating system of your device. Such actions could expose your phone to malware, viruses, malicious programs, compromise your phone's security features, and may result in the Application not functioning correctly or at all.</p>
+
+      <h2>4. Third-Party Services</h2>
+      <p>Please note that the Application utilizes third-party services that have their own Terms and Conditions. Below are the links to the Terms and Conditions of the third-party service providers used by the Application:</p>
+      <ul>
+        <li><a href="https://policies.google.com/terms" target="_blank">Google Play Services</a></li>
+        <li><a href="https://www.google.com/analytics/terms/" target="_blank">Google Analytics for Firebase</a></li>
+        <li><a href="https://firebase.google.com/terms/crashlytics" target="_blank">Firebase Crashlytics</a></li>
+      </ul>
+
+      <h2>5. Internet Connection</h2>
+      <p>Please be aware that the Service Provider does not assume responsibility for certain aspects. Some functions of the Application require an active internet connection, which can be Wi-Fi or provided by your mobile network provider. The Service Provider cannot be held responsible if the Application does not function at full capacity due to lack of access to Wi-Fi or if you have exhausted your data allowance.</p>
+
+      <h2>6. Mobile Data Usage</h2>
+      <p>If you are using the application outside of a Wi-Fi area, please be aware that your mobile network provider's agreement terms still apply. Consequently, you may incur charges from your mobile provider for data usage during the connection to the application, or other third-party charges. By using the application, you accept responsibility for any such charges, including roaming data charges if you use the application outside of your home territory (i.e., region or country) without disabling data roaming. If you are not the bill payer for the device on which you are using the application, they assume that you have obtained permission from the bill payer.</p>
+
+      <h2>7. Battery and Device Management</h2>
+      <p>Similarly, the Service Provider cannot always assume responsibility for your usage of the application. For instance, it is your responsibility to ensure that your device remains charged. If your device runs out of battery and you are unable to access the Service, the Service Provider cannot be held responsible.</p>
+
+      <h2>8. Accuracy and Liability</h2>
+      <p>In terms of the Service Provider's responsibility for your use of the application, it is important to note that while they strive to ensure that it is updated and accurate at all times, they do rely on third parties to provide information to them so that they can make it available to you. The Service Provider accepts no liability for any loss, direct or indirect, that you experience as a result of relying entirely on this functionality of the application.</p>
+
+      <h2>9. Updates and Compatibility</h2>
+      <p>The Service Provider may wish to update the application at some point. The application is currently available as per the requirements for the operating system (and for any additional systems they decide to extend the availability of the application to) may change, and you will need to download the updates if you want to continue using the application. The Service Provider does not guarantee that it will always update the application so that it is relevant to you and/or compatible with the particular operating system version installed on your device. However, you agree to always accept updates to the application when offered to you. The Service Provider may also wish to cease providing the application and may terminate its use at any time without providing termination notice to you.</p>
+
+      <h2>10. Termination of Services</h2>
+      <p>Unless they inform you otherwise, upon any termination:</p>
+      <ul>
+        <li>The rights and licenses granted to you in these terms will end;</li>
+        <li>You must cease using the application, and (if necessary) delete it from your device.</li>
+      </ul>
+
+      <h2>11. Changes to Terms and Conditions</h2>
+      <p>The Service Provider may periodically update their Terms and Conditions. Therefore, you are advised to review this page regularly for any changes. The Service Provider will notify you of any changes by posting the new Terms and Conditions on this page.</p>
+
+      <h2>12. Effective Date</h2>
+      <p>These terms and conditions are effective as of January 25, 2026</p>
+
+      <h2>13. Contact Us</h2>
+      <p>If you have any questions or suggestions about the Terms and Conditions, please do not hesitate to contact the Service Provider:</p>
+      <p><strong>Email:</strong> timetracker.track@gmail.com</p>
+
+      <hr>
+
+      <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin-top: 32px;">
+        <strong>End of Terms of Service</strong><br>
+        <em>This Terms of Service is effective as of January 25, 2026</em>
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 TimeTracker · <a href="index.html" style="color: inherit; text-decoration: none;">Home</a> · <a href="privacy-policy.html" style="color: inherit; text-decoration: none;">Privacy</a> · <a href="terms-of-service.html" style="color: inherit; text-decoration: none;">Terms</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+
+</body>
+</html>

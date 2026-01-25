@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Privacy Policy – TimeTracker</title>
+  <meta name="description" content="TimeTracker Privacy Policy - How we collect, use, and protect your data.">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --teal: #009688;
+      --teal-dark: #00796b;
+      --teal-light: #4db6ac;
+      --purple: #7c3aed;
+      --bg: #ffffff;
+      --bg-secondary: #f8fafc;
+      --text: #1e293b;
+      --text-secondary: #64748b;
+      --card-bg: #fff;
+      --card-border: #e2e8f0;
+      --shadow: rgba(0, 150, 136, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #0f172a;
+      --bg-secondary: #1e293b;
+      --text: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
+      line-height: 1.6;
+    }
+
+    /* Navbar */
+    .navbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 48px);
+      max-width: 1200px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.75);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 150, 136, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] .navbar {
+      background: rgba(30, 41, 59, 0.8);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+      transition: transform 0.3s;
+    }
+
+    .nav-logo:hover {
+      transform: scale(1.03);
+    }
+
+    .nav-logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+    }
+
+    .nav-logo span {
+      font-size: 1.25rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .nav-right {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      width: 60px;
+      height: 32px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .theme-toggle-slider {
+      width: 28px;
+      height: 28px;
+      background: var(--teal);
+      border-radius: 12px;
+      transition: transform 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle-btn {
+      width: 26px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+    }
+
+    .theme-toggle-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+    }
+
+    .theme-toggle-btn.sun {
+      display: flex;
+      opacity: 0;
+      position: absolute;
+    }
+
+    [data-theme="dark"] .theme-toggle-btn.sun {
+      opacity: 1;
+      position: relative;
+    }
+
+    .theme-toggle-btn.moon {
+      display: flex;
+      opacity: 1;
+      position: relative;
+    }
+
+    [data-theme="dark"] .theme-toggle-btn.moon {
+      opacity: 0;
+      position: absolute;
+    }
+
+    /* Content */
+    .policy-container {
+      max-width: 900px;
+      margin: 120px auto 60px;
+      padding: 0 24px;
+    }
+
+    .policy-header {
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .policy-header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .policy-header p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+    }
+
+    .policy-content {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 40px;
+      line-height: 1.8;
+    }
+
+    .policy-content h2 {
+      font-size: 1.5rem;
+      margin-top: 32px;
+      margin-bottom: 16px;
+      color: var(--teal);
+    }
+
+    .policy-content h3 {
+      font-size: 1.1rem;
+      margin-top: 20px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .policy-content h4 {
+      font-size: 1rem;
+      margin-top: 16px;
+      margin-bottom: 10px;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .policy-content p {
+      margin-bottom: 16px;
+      color: var(--text-secondary);
+    }
+
+    .policy-content ul {
+      margin: 16px 0 16px 24px;
+      color: var(--text-secondary);
+    }
+
+    .policy-content li {
+      margin-bottom: 8px;
+    }
+
+    .policy-content a {
+      color: var(--teal);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .policy-content a:hover {
+      color: var(--teal-dark);
+      text-decoration: underline;
+    }
+
+    .policy-content hr {
+      margin: 32px 0;
+      border: none;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .policy-content strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: var(--teal);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .back-link:hover {
+      color: var(--teal-dark);
+      transform: translateX(-4px);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--bg-secondary);
+      border-top: 1px solid var(--card-border);
+      padding: 40px 24px 20px;
+      margin-top: 60px;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .navbar {
+        width: calc(100% - 24px);
+        top: 8px;
+        left: 12px;
+        right: 12px;
+        transform: none;
+        max-width: none;
+        border-radius: 14px;
+        padding: 12px 16px;
+      }
+
+      .nav-logo span {
+        display: none;
+      }
+
+      .policy-container {
+        margin-top: 90px;
+        padding: 0 16px;
+      }
+
+      .policy-header h1 {
+        font-size: 1.8rem;
+      }
+
+      .policy-content {
+        padding: 24px;
+      }
+
+      .policy-content h2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .policy-container {
+        margin-top: 80px;
+        padding: 0 16px;
+      }
+
+      .policy-header h1 {
+        font-size: 1.5rem;
+      }
+
+      .policy-header p {
+        font-size: 0.9rem;
+      }
+
+      .policy-content {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .policy-content h2 {
+        font-size: 1.2rem;
+        margin-top: 24px;
+      }
+
+      .policy-content h3 {
+        font-size: 1rem;
+      }
+
+      .policy-content ul {
+        margin-left: 16px;
+      }
+
+      footer {
+        padding: 24px 16px 16px;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="nav-logo">
+      <img src="timetracker_icon.png" alt="TimeTracker Logo">
+      <span>TimeTracker</span>
+    </a>
+
+    <div class="nav-right">
+      <div class="theme-toggle" onclick="toggleTheme()">
+        <div class="theme-toggle-slider"></div>
+        <div class="theme-toggle-btn sun">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2"/></svg>
+        </div>
+        <div class="theme-toggle-btn moon">
+          <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="policy-container">
+    <a href="index.html" class="back-link">← Back to Home</a>
+
+    <div class="policy-header">
+      <h1>Privacy Policy</h1>
+      <p>Last Updated: January 2026</p>
+    </div>
+
+    <div class="policy-content">
+      <h2>1. Introduction</h2>
+      <p>This Privacy Policy describes how the TimeTracker application ("App", "we", "us") collects, uses, stores, and protects data from users ("you", "your"). The App is a time tracking and project management application for teams.</p>
+      <p>This Privacy Policy applies to all platforms (iOS, Android, Web, and Desktop) and online access to the App.</p>
+
+      <h2>2. Data Controller</h2>
+      <p><strong>Simon Kroismayr</strong><br>
+      For inquiries, please contact us at the information provided in Section 15.</p>
+
+      <h2>3. Data Collected</h2>
+      <h3>3.1 Authentication Data</h3>
+      <ul>
+        <li><strong>Google Sign-In:</strong> Email address, name, profile picture</li>
+        <li><strong>Firebase Authentication:</strong> Email, password (hashed), user ID</li>
+        <li>Authentication tokens and session data</li>
+      </ul>
+
+      <h3>3.2 User Profile and Account Data</h3>
+      <ul>
+        <li>Full name</li>
+        <li>Email address</li>
+        <li>Profile picture</li>
+        <li>Device information (manufacturer, model, OS version)</li>
+        <li>User preferences and settings</li>
+        <li>Timezone and language preferences</li>
+      </ul>
+
+      <h3>3.3 Time Tracking and Project Data</h3>
+      <ul>
+        <li>Work time entries and timestamps</li>
+        <li>Project names and descriptions</li>
+        <li>Team information</li>
+        <li>Tasks and their status</li>
+        <li>Activity logs</li>
+        <li>QR code scan data (for project identification)</li>
+      </ul>
+
+      <h3>3.4 Media and Files</h3>
+      <ul>
+        <li>Uploaded images and videos</li>
+        <li>Audio messages and voice memos</li>
+        <li>Compressed image versions</li>
+        <li>Video thumbnails</li>
+        <li>File metadata (size, type, upload time)</li>
+      </ul>
+
+      <h3>3.5 Analytics and Usage Data</h3>
+      <ul>
+        <li>Firebase Analytics: Page views, feature usage, errors/crashes</li>
+        <li>App opening events</li>
+        <li>Feature usage frequency and duration</li>
+        <li>User flow analysis</li>
+        <li>Error and exception logs</li>
+      </ul>
+
+      <h2>4. Data Storage and Cloud Services</h2>
+      <h3>4.1 Firebase Services</h3>
+      <p>Your data is processed in the following Google Firebase services:</p>
+      <ul>
+        <li><strong>Firebase Authentication:</strong> Secure user authentication</li>
+        <li><strong>Cloud Firestore:</strong> NoSQL database for user, project, and time data</li>
+        <li><strong>Firebase Storage:</strong> Cloud storage for images, videos, and files</li>
+        <li><strong>Firebase Cloud Functions:</strong> Serverless functions for backend logic</li>
+        <li><strong>Firebase Messaging:</strong> Push notifications</li>
+        <li><strong>Firebase Analytics:</strong> Usage analytics</li>
+        <li><strong>Firebase App Check:</strong> Security verification and fraud prevention</li>
+      </ul>
+      <p><strong>Google Firebase Privacy:</strong> <a href="https://firebase.google.com/support/privacy" target="_blank">https://firebase.google.com/support/privacy</a></p>
+
+      <h3>4.2 Encryption</h3>
+      <ul>
+        <li>Data transmission: SSL/TLS encryption</li>
+        <li>Data at rest: Firebase encryption</li>
+        <li>Sensitive data: Additional application-level encryption</li>
+      </ul>
+
+      <h2>5. Purpose of Data Processing</h2>
+      <p>We use the collected data for the following purposes:</p>
+      <h4>1. Providing App Functionality</h4>
+      <ul>
+        <li>User management and authentication</li>
+        <li>Time tracking and project management</li>
+        <li>Team collaboration and communication</li>
+        <li>Data synchronization across devices</li>
+      </ul>
+
+      <h4>2. Improving the App</h4>
+      <ul>
+        <li>Error identification and fixing</li>
+        <li>Performance monitoring</li>
+        <li>Feature usage analytics</li>
+        <li>User behavior analysis</li>
+      </ul>
+
+      <h4>3. Notifications</h4>
+      <ul>
+        <li>Time-based reminders</li>
+        <li>Team notifications</li>
+        <li>Important app updates</li>
+        <li>Only with user consent</li>
+      </ul>
+
+      <h4>4. Customer Support</h4>
+      <ul>
+        <li>Fixing technical issues</li>
+        <li>User support and help</li>
+        <li>Account management</li>
+      </ul>
+
+      <h2>6. Data Security</h2>
+      <p>We implement the following security measures:</p>
+      <ul>
+        <li><strong>Encrypted Transmission:</strong> SSL/TLS for all data transfers</li>
+        <li><strong>Secure Authentication:</strong> Industry-standard authentication protocols</li>
+        <li><strong>Access Control:</strong> Role-based access and permissions</li>
+        <li><strong>Regular Audits:</strong> Security testing and vulnerability assessments</li>
+        <li><strong>Staff Training:</strong> Privacy awareness and security training</li>
+        <li><strong>Incident Response:</strong> Data breach response plan</li>
+        <li><strong>Firebase Security:</strong> Google manages additional infrastructure security</li>
+      </ul>
+      <p><strong>Note:</strong> Despite these measures, no system can guarantee 100% security.</p>
+
+      <h2>7. User Rights</h2>
+      <h3>7.1 Right to Access</h3>
+      <p>The right to know what data we store about you.</p>
+
+      <h3>7.2 Right to Rectification</h3>
+      <p>The right to correct inaccurate or incomplete data.</p>
+
+      <h3>7.3 Right to Erasure ("Right to be Forgotten")</h3>
+      <p>The right to have your data deleted, under certain conditions.</p>
+
+      <h3>7.4 Right to Data Portability</h3>
+      <p>The right to receive your data in a structured, common format.</p>
+
+      <h3>7.5 Right to Object</h3>
+      <p>The right to object to processing of your data.</p>
+
+      <h3>Requesting Rights:</h3>
+      <p>Contact us at: <strong>timetracker.track@gmail.com</strong><br>
+      We will respond within 30 days.</p>
+
+      <h2>8. Data Deletion and Retention</h2>
+      <h3>8.1 Retention Policies</h3>
+      <ul>
+        <li><strong>Active User Accounts:</strong> Data stored as long as app is used</li>
+        <li><strong>Deleted Accounts:</strong> User data deleted within 30 days</li>
+        <li><strong>Backup Data:</strong> May exist for up to 90 days after deletion</li>
+        <li><strong>Analytics Data:</strong> Firebase Analytics retains data for 14 months</li>
+        <li><strong>Logs:</strong> Server logs retained for up to 30 days</li>
+      </ul>
+
+      <h3>8.2 Account Deletion</h3>
+      <p>Users can delete their account:</p>
+      <ol>
+        <li>In app settings</li>
+        <li>By email request to: <strong>timetracker.track@gmail.com</strong></li>
+      </ol>
+
+      <h2>9. Children and Minors</h2>
+      <p>The TimeTracker App is not intended for persons under 13 years of age. We do not knowingly collect data from children under 13 years old.</p>
+      <p>If we learn that we have collected data from a child under 13 years of age, we will delete it as quickly as possible.</p>
+
+      <h2>10. Third-Party Privacy Policies</h2>
+      <p>The app uses the following third-party services with their own privacy policies:</p>
+      <ul>
+        <li><strong>Google Firebase:</strong> <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></li>
+        <li><strong>Google Sign-In:</strong> <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></li>
+        <li><strong>Firebase Analytics:</strong> <a href="https://support.google.com/analytics/answer/9019185" target="_blank">https://support.google.com/analytics/answer/9019185</a></li>
+      </ul>
+
+      <h2>11. Changes to This Privacy Policy</h2>
+      <p>We may update this Privacy Policy at any time. Important changes will:</p>
+      <ul>
+        <li>Be made with at least 30 days' notice</li>
+        <li>Be displayed in the app</li>
+        <li>Be published on our website</li>
+      </ul>
+      <p><strong>Last Update:</strong> January 2026</p>
+
+      <h2>12. Contact Us</h2>
+      <p>For privacy inquiries, complaints, or concerns, please contact:</p>
+      <p><strong>Privacy Contact:</strong><br>
+      Email: timetracker.track@gmail.com<br>
+      <strong>Response Times:</strong><br>
+      Simple inquiries: 7-10 days<br>
+      Privacy requests: 30 days (legally required)</p>
+
+      <hr>
+
+      <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin-top: 32px;">
+        <strong>End of Privacy Policy</strong><br>
+        <em>This Privacy Policy is effective as of January 25, 2026</em>
+      </p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 TimeTracker · <a href="index.html" style="color: inherit; text-decoration: none;">Home</a> · <a href="privacy-policy.html" style="color: inherit; text-decoration: none;">Privacy</a> · <a href="terms-of-service.html" style="color: inherit; text-decoration: none;">Terms</a></p>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      if (html.getAttribute('data-theme') === 'dark') {
+        html.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+
+</body>
+</html>
