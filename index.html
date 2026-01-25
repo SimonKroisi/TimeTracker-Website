@@ -175,8 +175,9 @@
     .nav-logo img {
       width: 40px;
       height: 40px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px var(--shadow);
+      border-radius: 0;
+      background: transparent;
+      box-shadow: none;
       transition: transform 0.3s;
     }
 
@@ -2716,7 +2717,7 @@
 
     @media (max-width: 768px) {
       .navbar {
-        padding: 12px 16px;
+        padding: 10px 16px;
         width: calc(100% - 24px);
         top: 8px;
         left: 12px;
@@ -2736,8 +2737,11 @@
       }
 
       .nav-logo img {
-        width: 28px;
-        height: 28px;
+        width: 32px;
+        height: 32px;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
       }
 
       .nav-links {
@@ -2746,14 +2750,29 @@
 
       .nav-right {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         align-items: center;
       }
 
       .nav-cta {
-        padding: 8px 16px !important;
-        font-size: 0.85rem !important;
-        min-height: 36px !important;
+        padding: 8px 14px !important;
+        font-size: 0.8rem !important;
+        min-height: 34px !important;
+        border-radius: 10px !important;
+      }
+
+      /* Journey section - tablet */
+      .journey-container {
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .journey-step {
+        min-height: auto;
+      }
+
+      .journey-connector {
+        display: none;
       }
 
       section {
@@ -3570,6 +3589,243 @@
       p {
         word-wrap: break-word;
         overflow-wrap: break-word;
+      }
+
+      /* Journey / How it works section - MOBILE FIX */
+      .journey-container {
+        flex-direction: column !important;
+        gap: 20px !important;
+        padding: 0 16px;
+      }
+
+      .journey-step {
+        flex: none !important;
+        min-height: auto !important;
+        width: 100% !important;
+      }
+
+      .journey-number {
+        width: 44px !important;
+        height: 44px !important;
+        font-size: 1.2rem !important;
+        margin-bottom: 16px !important;
+      }
+
+      .journey-card {
+        padding: 20px 16px !important;
+        border-radius: 14px !important;
+      }
+
+      .journey-card h3 {
+        font-size: 1.1rem !important;
+        margin-bottom: 8px !important;
+      }
+
+      .journey-card p {
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+        margin-bottom: 12px !important;
+      }
+
+      .journey-icon {
+        width: 56px !important;
+        height: 56px !important;
+        margin-bottom: 16px !important;
+      }
+
+      .journey-icon svg {
+        width: 28px !important;
+        height: 28px !important;
+      }
+
+      .journey-emoji {
+        font-size: 1.8rem !important;
+      }
+
+      .journey-connector {
+        display: none !important;
+      }
+
+      /* Tracki Section - MOBILE FIX */
+      .tracki-section {
+        padding: 40px 16px !important;
+      }
+
+      .tracki-container {
+        flex-direction: column !important;
+        text-align: center !important;
+        gap: 20px !important;
+      }
+
+      .tracki-image-wrapper {
+        width: 100px !important;
+        height: 100px !important;
+        margin: 0 auto !important;
+      }
+
+      .tracki-image-wrapper img {
+        width: 70px !important;
+        height: 70px !important;
+      }
+
+      .tracki-content {
+        text-align: center !important;
+      }
+
+      .tracki-content h3 {
+        font-size: 1.4rem !important;
+        margin-bottom: 12px !important;
+      }
+
+      .tracki-content p {
+        font-size: 0.9rem !important;
+        line-height: 1.5 !important;
+      }
+
+      .streak-badges {
+        position: static !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        margin-top: 16px !important;
+        transform: none !important;
+      }
+
+      .streak-badge {
+        position: static !important;
+        padding: 6px 10px !important;
+        font-size: 0.75rem !important;
+        animation: none !important;
+      }
+
+      .streak-progress {
+        justify-content: center !important;
+      }
+
+      .streak-dot {
+        width: 30px !important;
+        height: 6px !important;
+      }
+
+      /* Stats section - MOBILE FIX */
+      .stats-container {
+        flex-direction: column !important;
+        gap: 16px !important;
+        padding: 0 !important;
+      }
+
+      .stat-item {
+        padding: 24px 16px !important;
+        border-radius: 12px !important;
+        text-align: center !important;
+      }
+
+      .stat-value {
+        font-size: 2rem !important;
+      }
+
+      .stat-label {
+        font-size: 0.9rem !important;
+      }
+
+      /* Platform section - MOBILE FIX */
+      .platforms-section {
+        padding: 40px 16px !important;
+      }
+
+      .platform-icons {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+      }
+
+      .platform {
+        padding: 16px 12px !important;
+        border-radius: 12px !important;
+      }
+
+      .platform-icon-wrapper {
+        width: 44px !important;
+        height: 44px !important;
+      }
+
+      .platform-icon-wrapper svg {
+        width: 22px !important;
+        height: 22px !important;
+      }
+
+      .platform span {
+        font-size: 0.8rem !important;
+        margin-top: 8px !important;
+      }
+
+      .platform-badge {
+        font-size: 0.65rem !important;
+        padding: 3px 6px !important;
+        margin-top: 6px !important;
+      }
+
+      /* Feature cards demo - MOBILE FIX */
+      .feature-card.large {
+        flex-direction: column !important;
+      }
+
+      .feature-card.large .feature-content {
+        order: 1;
+      }
+
+      .feature-card.large .feature-demo {
+        order: 2;
+        width: 100% !important;
+        margin-top: 16px;
+      }
+
+      /* Timer display fix */
+      .timer-display {
+        font-size: 2rem !important;
+        padding: 10px !important;
+        letter-spacing: 2px;
+      }
+
+      .timer-task-input {
+        padding: 10px 12px !important;
+        font-size: 0.9rem !important;
+      }
+
+      .timer-project-selector {
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .timer-action-btn {
+        padding: 10px 16px !important;
+        font-size: 0.85rem !important;
+        flex: 1;
+        min-width: 80px;
+      }
+
+      /* Footer - MOBILE FIX */
+      .footer-minimal {
+        flex-direction: column !important;
+        gap: 24px !important;
+        text-align: center !important;
+      }
+
+      .footer-brand {
+        text-align: center !important;
+      }
+
+      .footer-logo {
+        justify-content: center !important;
+      }
+
+      .footer-links {
+        text-align: center !important;
+      }
+
+      .footer-links a {
+        display: block !important;
+        padding: 8px 0 !important;
       }
     }
   </style>
