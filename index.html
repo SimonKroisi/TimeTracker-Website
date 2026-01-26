@@ -6,6 +6,65 @@
   <title>TimeTracker – Track Time. Manage Projects. Stay in Sync.</title>
   <meta name="description" content="TimeTracker helps teams organize, plan, and track their work efficiently. Time tracking, task management, and progress insights in one app.">
 
+  <!-- Device Detection Script - Runs before content loads -->
+  <script>
+    (function() {
+      // Detect device type based on user agent and screen
+      const ua = navigator.userAgent.toLowerCase();
+      const isMobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini|mobile/i.test(ua);
+      const isTabletUA = /ipad|tablet|playbook|silk/i.test(ua) || (ua.includes('android') && !ua.includes('mobile'));
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const screenWidth = window.innerWidth;
+      
+      // Determine device type
+      let deviceType = 'desktop';
+      if (isMobileUA || (isTouch && screenWidth <= 480)) {
+        deviceType = 'mobile';
+      } else if (isTabletUA || (isTouch && screenWidth <= 1024)) {
+        deviceType = 'tablet';
+      }
+      
+      // Apply classes to html element immediately (before body exists)
+      const html = document.documentElement;
+      html.classList.add('is-' + deviceType);
+      if (isTouch) html.classList.add('is-touch');
+      if (!isTouch) html.classList.add('is-pointer');
+      
+      // Store for later use
+      window.deviceInfo = {
+        type: deviceType,
+        isMobile: deviceType === 'mobile',
+        isTablet: deviceType === 'tablet',
+        isDesktop: deviceType === 'desktop',
+        isTouch: isTouch,
+        screenWidth: screenWidth
+      };
+      
+      // Update on resize (for responsive switching)
+      window.addEventListener('resize', function() {
+        const newWidth = window.innerWidth;
+        window.deviceInfo.screenWidth = newWidth;
+        
+        // Optional: Update classes on significant resize
+        if (newWidth <= 480 && !html.classList.contains('screen-small')) {
+          html.classList.remove('screen-medium', 'screen-large');
+          html.classList.add('screen-small');
+        } else if (newWidth <= 1024 && !html.classList.contains('screen-medium')) {
+          html.classList.remove('screen-small', 'screen-large');
+          html.classList.add('screen-medium');
+        } else if (newWidth > 1024 && !html.classList.contains('screen-large')) {
+          html.classList.remove('screen-small', 'screen-medium');
+          html.classList.add('screen-large');
+        }
+      });
+      
+      // Initial screen size class
+      if (screenWidth <= 480) html.classList.add('screen-small');
+      else if (screenWidth <= 1024) html.classList.add('screen-medium');
+      else html.classList.add('screen-large');
+    })();
+  </script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -3680,6 +3739,158 @@
         -webkit-tap-highlight-color: transparent;
       }
     }
+
+    /* ========================================
+       DEVICE-SPECIFIC STYLES (Beyond Media Queries)
+       Uses JS-detected classes: .is-mobile, .is-tablet, .is-desktop, .is-touch, .is-pointer
+       ======================================== */
+    
+    /* === MOBILE-ONLY STYLES (detected via User Agent) === */
+    .is-mobile body {
+      /* Optimized font rendering for mobile */
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    .is-mobile .hero-floating,
+    .is-mobile .floating-elements {
+      display: none !important;
+    }
+    
+    .is-mobile .hero {
+      padding-top: 70px !important;
+      min-height: auto !important;
+    }
+    
+    .is-mobile .navbar {
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
+    
+    .is-mobile .nav-links {
+      display: none !important;
+    }
+    
+    .is-mobile .feature-card:hover {
+      transform: none !important;
+    }
+    
+    .is-mobile .btn:hover {
+      transform: none !important;
+    }
+    
+    .is-mobile .streak-badges {
+      display: none !important;
+    }
+    
+    /* Mobile: Simplified animations */
+    .is-mobile .animate-on-scroll {
+      transition-duration: 0.4s !important;
+    }
+    
+    .is-mobile .feature-demo {
+      max-height: 200px !important;
+      overflow: hidden !important;
+    }
+    
+    /* === TABLET STYLES === */
+    .is-tablet .nav-links a {
+      font-size: 0.85rem;
+    }
+    
+    .is-tablet .features-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    
+    .is-tablet .hero-title {
+      font-size: 2.5rem !important;
+    }
+    
+    /* === DESKTOP-ONLY STYLES === */
+    .is-desktop .feature-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .is-desktop .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px var(--shadow);
+    }
+    
+    .is-desktop .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px var(--teal-glow);
+    }
+    
+    /* Desktop: Enhanced animations */
+    .is-desktop .hero-floating {
+      display: block !important;
+    }
+    
+    /* === TOUCH DEVICE STYLES === */
+    .is-touch * {
+      cursor: default !important;
+    }
+    
+    .is-touch .btn,
+    .is-touch button,
+    .is-touch a {
+      cursor: pointer !important;
+    }
+    
+    /* Larger touch targets on touch devices */
+    .is-touch .nav-cta {
+      min-height: 44px !important;
+      min-width: 44px !important;
+    }
+    
+    .is-touch .theme-toggle {
+      min-height: 44px !important;
+    }
+    
+    /* Disable hover effects on touch */
+    .is-touch .feature-card:hover,
+    .is-touch .testimonial-card:hover,
+    .is-touch .journey-card:hover {
+      transform: none !important;
+    }
+    
+    /* === POINTER (MOUSE) DEVICE STYLES === */
+    .is-pointer .feature-card {
+      cursor: pointer;
+    }
+    
+    .is-pointer .btn {
+      cursor: pointer;
+    }
+    
+    /* Hover effects only for pointer devices */
+    .is-pointer .nav-logo:hover {
+      transform: scale(1.03);
+    }
+    
+    .is-pointer .testimonial-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 40px var(--shadow);
+    }
+
+    /* === SCREEN SIZE CLASSES (updated via JS on resize) === */
+    .screen-small .hero-cta {
+      flex-direction: column !important;
+      width: 100% !important;
+    }
+    
+    .screen-small .hero-cta .btn {
+      width: 100% !important;
+    }
+    
+    .screen-medium .features-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .screen-large .features-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
   </style>
 </head>
 
