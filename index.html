@@ -2794,8 +2794,8 @@
       }
 
       .nav-logo span {
-        font-size: 1rem;
-        display: none;
+        font-size: 0.9rem;
+        display: inline !important;
       }
 
       .nav-logo img {
@@ -2804,6 +2804,29 @@
         border-radius: 0;
         background: transparent;
         box-shadow: none;
+      }
+
+      /* Fixed theme toggle for tablet */
+      .theme-toggle {
+        padding: 4px;
+        height: 36px;
+        width: 72px;
+      }
+
+      .theme-toggle-btn {
+        width: 28px;
+        height: 28px;
+      }
+
+      .theme-toggle-slider {
+        top: 4px;
+        left: 4px;
+        width: 28px;
+        height: 28px;
+      }
+
+      [data-theme="dark"] .theme-toggle-slider {
+        transform: translateX(36px);
       }
 
       .nav-links {
@@ -3154,36 +3177,61 @@
         top: 6px !important;
         left: 8px !important;
         right: 8px !important;
-        border-radius: 12px !important;
-        gap: 8px;
+        border-radius: 14px !important;
+        gap: 10px;
+      }
+
+      .nav-logo {
+        gap: 8px !important;
       }
 
       .nav-logo img {
-        width: 28px !important;
-        height: 28px !important;
+        width: 26px !important;
+        height: 26px !important;
       }
 
+      .nav-logo span {
+        display: inline !important;
+        font-size: 0.85rem !important;
+      }
+
+      /* Theme Toggle - Fixed positioning */
       .theme-toggle {
-        padding: 4px !important;
-        border-radius: 8px !important;
-        height: 32px !important;
+        padding: 3px !important;
+        border-radius: 20px !important;
+        height: 30px !important;
+        width: 58px !important;
+        min-width: 58px !important;
       }
 
       .theme-toggle-btn {
+        width: 22px !important;
+        height: 22px !important;
+      }
+
+      .theme-toggle-btn svg {
+        width: 11px !important;
+        height: 11px !important;
+      }
+
+      .theme-toggle-slider {
+        top: 3px !important;
+        left: 3px !important;
         width: 24px !important;
         height: 24px !important;
       }
 
-      .theme-toggle-btn svg {
-        width: 12px !important;
-        height: 12px !important;
+      [data-theme="dark"] .theme-toggle-slider {
+        transform: translateX(28px) !important;
       }
 
       .nav-cta {
-        padding: 6px 12px !important;
+        padding: 8px 14px !important;
         font-size: 0.75rem !important;
-        min-height: 32px !important;
-        border-radius: 8px !important;
+        min-height: 30px !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
+        background: linear-gradient(135deg, var(--teal), var(--teal-dark)) !important;
       }
 
       /* ========== HERO SECTION ========== */
@@ -3233,24 +3281,27 @@
 
       /* ========== HERO BUTTONS - IMPROVED ========== */
       .hero-cta {
-        flex-direction: column !important;
+        flex-direction: row !important;
         gap: 10px !important;
         width: 100%;
-      }
-
-      .btn {
-        padding: 12px 20px !important;
-        font-size: 0.9rem !important;
-        width: 100% !important;
-        min-height: 44px !important;
-        border-radius: 10px !important;
-        font-weight: 600 !important;
         justify-content: center !important;
       }
 
+      .btn {
+        padding: 10px 16px !important;
+        font-size: 0.8rem !important;
+        width: auto !important;
+        min-height: 40px !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
+        justify-content: center !important;
+        flex: 0 1 auto !important;
+        white-space: nowrap !important;
+      }
+
       .btn svg {
-        width: 18px !important;
-        height: 18px !important;
+        width: 14px !important;
+        height: 14px !important;
       }
 
       .btn:active {
@@ -3311,14 +3362,16 @@
       }
 
       .features-grid {
-        grid-template-columns: 1fr !important;
-        gap: 12px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
       }
 
       .feature-card {
-        padding: 14px !important;
-        border-radius: 10px !important;
-        gap: 12px !important;
+        padding: 10px !important;
+        border-radius: 8px !important;
+        gap: 8px !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
       }
 
       .feature-card.large {
@@ -3327,34 +3380,46 @@
       }
 
       .feature-icon {
-        width: 32px !important;
-        height: 32px !important;
-        min-width: 32px;
-        border-radius: 8px !important;
+        width: 26px !important;
+        height: 26px !important;
+        min-width: 26px;
+        border-radius: 6px !important;
       }
 
       .feature-icon svg {
-        width: 16px !important;
-        height: 16px !important;
+        width: 12px !important;
+        height: 12px !important;
       }
 
       .feature-content h3 {
-        font-size: 0.95rem !important;
-        margin-bottom: 4px !important;
+        font-size: 0.75rem !important;
+        margin-bottom: 2px !important;
+        line-height: 1.2 !important;
       }
 
       .feature-content p {
-        font-size: 0.8rem !important;
-        line-height: 1.4;
+        font-size: 0.65rem !important;
+        line-height: 1.3;
+        display: -webkit-box !important;
+        -webkit-line-clamp: 2 !important;
+        -webkit-box-orient: vertical !important;
+        overflow: hidden !important;
       }
 
       /* ========== FEATURE DEMOS - COMPACT ========== */
       .feature-demo {
-        min-height: 180px !important;
-        max-height: 220px !important;
-        border-radius: 8px !important;
-        padding: 10px !important;
+        min-height: 100px !important;
+        max-height: 120px !important;
+        border-radius: 6px !important;
+        padding: 6px !important;
         overflow: hidden !important;
+        display: none !important;
+      }
+
+      .feature-card.large .feature-demo {
+        display: block !important;
+        min-height: 80px !important;
+        max-height: 100px !important;
       }
 
       .timer-demo-app {
@@ -3442,14 +3507,14 @@
 
       /* ========== TRACKI SECTION - SIDE BY SIDE ========== */
       .tracki-section {
-        padding: 32px 16px !important;
+        padding: 24px 16px !important;
       }
 
       .tracki-container {
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
-        gap: 16px !important;
+        gap: 12px !important;
         text-align: left !important;
       }
 
@@ -3459,13 +3524,14 @@
       }
 
       .tracki-image-wrapper {
-        width: 80px !important;
-        height: 80px !important;
-        padding: 12px !important;
+        width: 56px !important;
+        height: 56px !important;
+        padding: 8px !important;
+        border-width: 2px !important;
       }
 
       .tracki-image-wrapper img {
-        width: 56px !important;
+        width: 40px !important;
         height: auto !important;
       }
 
@@ -3475,25 +3541,27 @@
         text-align: left !important;
       }
 
-      .tracki-content h3 {
-        font-size: 1.1rem !important;
-        margin-bottom: 8px !important;
+      .tracki-content h2 {
+        font-size: 0.95rem !important;
+        margin-bottom: 4px !important;
       }
 
       .tracki-content p {
-        font-size: 0.8rem !important;
-        line-height: 1.4 !important;
-        margin-bottom: 12px !important;
+        font-size: 0.7rem !important;
+        line-height: 1.3 !important;
+        margin-bottom: 8px !important;
       }
 
       .streak-progress {
         justify-content: flex-start !important;
-        margin-bottom: 12px !important;
+        margin-bottom: 8px !important;
+        gap: 3px !important;
       }
 
       .streak-dot {
-        width: 24px !important;
-        height: 5px !important;
+        width: 18px !important;
+        height: 4px !important;
+        border-radius: 2px !important;
       }
 
       .streak-badges {
@@ -3504,13 +3572,9 @@
         display: none !important;
       }
 
-      .tracki-cta {
-        width: 100% !important;
-      }
-
-      .tracki-cta .btn {
-        padding: 10px 16px !important;
-        font-size: 0.85rem !important;
+      .tracki-cta,
+      .tracki-content > .btn {
+        display: none !important;
       }
 
       /* ========== JOURNEY / GET STARTED - HORIZONTAL SCROLL ========== */
@@ -3579,11 +3643,20 @@
       }
 
       .journey-emoji {
-        font-size: 1.4rem !important;
+        display: none !important;
       }
 
       .journey-connector {
         display: none !important;
+      }
+
+      .journey-card h3 {
+        font-size: 0.85rem !important;
+      }
+
+      .journey-card p {
+        font-size: 0.7rem !important;
+        line-height: 1.3 !important;
       }
 
       /* ========== TESTIMONIALS ========== */
@@ -3660,64 +3733,64 @@
 
       /* ========== FOOTER - COMPACT HORIZONTAL ========== */
       footer {
-        padding: 20px 16px 16px !important;
+        padding: 12px 12px 10px !important;
       }
 
       .footer-content.footer-minimal {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 16px !important;
-        justify-content: space-between !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr 1fr !important;
+        gap: 8px !important;
         align-items: flex-start !important;
-        margin-bottom: 16px !important;
+        margin-bottom: 8px !important;
       }
 
       .footer-brand {
-        flex: 1 1 100% !important;
+        grid-column: 1 / -1 !important;
         text-align: center !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 4px !important;
       }
 
       .footer-logo {
         justify-content: center !important;
-        margin-bottom: 6px !important;
+        margin-bottom: 2px !important;
+        gap: 6px !important;
       }
 
       .footer-logo img {
-        width: 28px !important;
-        height: 28px !important;
+        width: 20px !important;
+        height: 20px !important;
       }
 
       .footer-logo span {
-        font-size: 0.95rem !important;
+        font-size: 0.8rem !important;
       }
 
       .footer-brand p {
-        font-size: 0.75rem !important;
+        font-size: 0.65rem !important;
         margin-bottom: 0 !important;
       }
 
       .footer-links {
-        flex: 1;
         text-align: center !important;
       }
 
       .footer-links h4 {
-        font-size: 0.8rem !important;
-        margin-bottom: 8px !important;
+        font-size: 0.65rem !important;
+        margin-bottom: 4px !important;
+        font-weight: 600 !important;
       }
 
       .footer-links a {
-        font-size: 0.75rem !important;
-        margin-bottom: 6px !important;
-        display: inline-block !important;
-        padding: 4px 8px !important;
+        font-size: 0.6rem !important;
+        margin-bottom: 2px !important;
+        display: block !important;
+        padding: 2px 0 !important;
       }
 
       .footer-bottom {
-        padding-top: 12px !important;
-        font-size: 0.7rem !important;
+        padding-top: 8px !important;
+        font-size: 0.6rem !important;
+        border-top: 1px solid var(--card-border) !important;
       }
 
       /* ========== GENERAL IMPROVEMENTS ========== */
@@ -3791,6 +3864,26 @@
     .is-mobile .feature-demo {
       max-height: 200px !important;
       overflow: hidden !important;
+    }
+
+    /* Mobile: Hide journey emojis */
+    .is-mobile .journey-emoji {
+      display: none !important;
+    }
+
+    /* Mobile: Smaller Tracki section */
+    .is-mobile .tracki-content h2 {
+      font-size: 0.95rem !important;
+    }
+
+    .is-mobile .tracki-image-wrapper {
+      width: 56px !important;
+      height: 56px !important;
+    }
+
+    /* Mobile: Hide Start Your Streak button */
+    .is-mobile .tracki-content > .btn {
+      display: none !important;
     }
     
     /* === TABLET STYLES === */
@@ -4026,7 +4119,7 @@
       </p>
 
       <div class="hero-cta">
-        <a href="#" class="btn btn-primary">
+        <a href="#platforms" class="btn btn-primary">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Download Free
         </a>
@@ -4447,7 +4540,7 @@
   <section class="testimonials-section" id="reviews">
     <div class="section-header animate-on-scroll">
       <div class="section-tag">Reviews</div>
-      <h2 class="section-title">Loved by teams worldwide</h2>
+      <h2 class="section-title">Loved by users worldwide</h2>
       <p class="section-subtitle">
         See what our users have to say about their experience with TimeTracker.
       </p>
@@ -4517,7 +4610,7 @@
   </section>
 
   <!-- PLATFORMS -->
-  <section class="platforms-section">
+  <section class="platforms-section" id="platforms">
     <div class="section-header animate-on-scroll">
       <div class="section-tag">Platforms</div>
       <h2 class="section-title">Available everywhere</h2>
