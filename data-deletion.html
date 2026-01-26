@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Delete Account – TimeTracker</title>
-  <meta name="description" content="Learn how to request deletion of your TimeTracker account and associated data.">
+  <title>Request Data Deletion – TimeTracker</title>
+  <meta name="description" content="Learn how to request deletion of specific data in your TimeTracker account while keeping your account active.">
 
   <style>
     * {
@@ -333,6 +333,41 @@
       font-size: 0.95rem;
     }
 
+    /* Data Types Grid */
+    .data-types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .data-type-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s;
+    }
+
+    .data-type-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 4px 12px var(--shadow);
+    }
+
+    .data-type-card h4 {
+      color: var(--teal);
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .data-type-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
     /* Important Notice */
     .notice-box {
       background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(124, 58, 237, 0.1));
@@ -340,6 +375,15 @@
       border-radius: 12px;
       padding: 20px;
       margin: 24px 0;
+    }
+
+    .notice-box.auto-delete {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
+      border-color: #22c55e;
+    }
+
+    .notice-box.auto-delete h4 {
+      color: #22c55e;
     }
 
     .notice-box h4 {
@@ -411,6 +455,10 @@
 
       .policy-content h2 {
         font-size: 1.3rem;
+      }
+
+      .data-types-grid {
+        grid-template-columns: 1fr;
       }
     }
 
@@ -496,13 +544,55 @@
     <a href="index.html" class="back-link">← Back to Home</a>
 
     <div class="policy-header">
-      <h1>Delete Your Account</h1>
-      <p>How to request deletion of your TimeTracker account and data</p>
+      <h1>Request Data Deletion</h1>
+      <p>Control what data you want to remove while keeping your account</p>
     </div>
 
     <div class="policy-content">
-      <h2>How to Delete Your Account</h2>
-      <p>If you wish to delete your TimeTracker account and all associated data, please follow these simple steps within the app:</p>
+      <h2>Request Deletion of Specific Data</h2>
+      <p>TimeTracker gives you control over your personal data. You can request to delete specific types of data or individual records without deleting your entire account. This allows you to maintain your account while removing data you no longer need.</p>
+
+      <div class="notice-box auto-delete">
+        <h4>✨ Automatic Data Deletion</h4>
+        <p><strong>Inactive data is automatically deleted after 90 days.</strong> If you haven't used TimeTracker and your data remains unchanged, it will be automatically removed. This gives you peace of mind without requiring manual action.</p>
+      </div>
+
+      <h2>Types of Data You Can Delete</h2>
+      
+      <div class="data-types-grid">
+        <div class="data-type-card">
+          <h4>⏱️ Time Entries</h4>
+          <p>Delete specific work time entries or all entries from a particular project or date range.</p>
+        </div>
+
+        <div class="data-type-card">
+          <h4>📊 Projects</h4>
+          <p>Remove entire projects and all associated data (only for projects you own).</p>
+        </div>
+
+        <div class="data-type-card">
+          <h4>✅ Tasks</h4>
+          <p>Delete completed or archived tasks and their history.</p>
+        </div>
+
+        <div class="data-type-card">
+          <h4>📸 Media Files</h4>
+          <p>Remove uploaded images, videos, audio messages, and other media files.</p>
+        </div>
+
+        <div class="data-type-card">
+          <h4>📝 Activity Logs</h4>
+          <p>Clear activity history and logs from your account.</p>
+        </div>
+
+        <div class="data-type-card">
+          <h4>🔐 Profile Data</h4>
+          <p>Request to delete specific profile information while keeping your account active.</p>
+        </div>
+      </div>
+
+      <h2>How to Request Data Deletion</h2>
+      <p>Follow these simple steps within the TimeTracker app to request deletion of specific data:</p>
 
       <div class="steps-container">
         <div class="step">
@@ -517,7 +607,7 @@
           <div class="step-number">2</div>
           <div class="step-content">
             <h4>Go to Support / Help</h4>
-            <p>In the Settings menu, tap on <strong>Support / Help</strong>.</p>
+            <p>In the Settings menu, tap on <strong>Support / Help</strong> or <strong>Privacy Settings</strong>.</p>
           </div>
         </div>
 
@@ -532,53 +622,67 @@
         <div class="step">
           <div class="step-number">4</div>
           <div class="step-content">
-            <h4>Request Account Deletion</h4>
-            <p>In your message, clearly state that you want to <strong>delete your account and all associated data</strong>. Include your registered email address for verification.</p>
+            <h4>Specify What to Delete</h4>
+            <p>Clearly describe which data you want to delete. Be specific about:</p>
+            <ul style="margin: 8px 0 0 0;">
+              <li>Type of data (entries, projects, files, etc.)</li>
+              <li>Date range (if applicable)</li>
+              <li>Specific items (if deleting individual records)</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">5</div>
+          <div class="step-content">
+            <h4>Submit Your Request</h4>
+            <p>Submit the request and include your registered email address for verification.</p>
           </div>
         </div>
       </div>
 
       <div class="notice-box">
         <h4>📧 Alternative: Contact via Email</h4>
-        <p>You can also request account deletion by sending an email to <strong>timetracker.track@gmail.com</strong> with the subject "Account Deletion Request" and include your registered email address.</p>
+        <p>You can also request data deletion by sending an email to <strong>timetracker.track@gmail.com</strong> with the subject "Data Deletion Request" and specify what data you want removed.</p>
       </div>
 
       <hr>
 
-      <h2>What Data Will Be Deleted</h2>
-      <p>When you request account deletion, the following data will be permanently removed:</p>
+      <h2>Data Processing Timeline</h2>
       <ul>
-        <li><strong>Account Information:</strong> Your name, email address, profile picture, and login credentials</li>
-        <li><strong>Time Tracking Data:</strong> All recorded work time entries and timestamps</li>
-        <li><strong>Project Data:</strong> Projects you created or own (shared projects will remain for other team members)</li>
-        <li><strong>Tasks and Activities:</strong> All tasks, activity logs, and associated records</li>
-        <li><strong>Media and Files:</strong> Uploaded images, videos, audio messages, and documents</li>
-        <li><strong>User Preferences:</strong> Settings, preferences, and notification configurations</li>
+        <li><strong>Request Processing:</strong> 7-10 days for simple deletion requests</li>
+        <li><strong>Complex Requests:</strong> Up to 30 days for requests affecting multiple projects or large datasets</li>
+        <li><strong>Confirmation:</strong> You'll receive an email confirming what data has been deleted</li>
+        <li><strong>Your Account:</strong> Remains active and you can continue using TimeTracker normally</li>
       </ul>
 
-      <h2>Data Retention After Deletion</h2>
-      <p>Please note the following retention periods after your deletion request is processed:</p>
+      <h2>Automatic Data Deletion (No Action Required)</h2>
+      <p>TimeTracker automatically cleans up data to respect your privacy:</p>
       <ul>
-        <li><strong>Account Data:</strong> Deleted within <strong>30 days</strong> of request confirmation</li>
-        <li><strong>Backup Data:</strong> May exist in backups for up to <strong>90 days</strong> after deletion</li>
-        <li><strong>Analytics Data:</strong> Anonymized analytics data in Firebase Analytics may be retained for up to <strong>14 months</strong></li>
-        <li><strong>Server Logs:</strong> System logs containing your activity may be retained for up to <strong>30 days</strong></li>
+        <li><strong>Inactive Accounts:</strong> Unused accounts and their data are automatically deleted after 90 days of inactivity</li>
+        <li><strong>Temporary Data:</strong> Session tokens and temporary caches are automatically cleared</li>
+        <li><strong>Old Logs:</strong> Server logs are automatically purged after 30 days</li>
+        <li><strong>Backup Cleanup:</strong> Deleted data is removed from backups within 90 days</li>
       </ul>
 
       <div class="notice-box">
-        <h4>⚠️ Important Information</h4>
-        <p>Account deletion is <strong>permanent and cannot be undone</strong>. Please ensure you have exported any data you wish to keep before requesting deletion. If you are part of a team, your shared project contributions may be retained for other team members.</p>
+        <h4>ℹ️ Keep Your Account Active</h4>
+        <p>If you want to keep using TimeTracker without worrying about automatic deletion, simply stay active by logging in periodically or using the app. Active accounts are never automatically deleted.</p>
       </div>
 
       <hr>
 
-      <h2>Processing Time</h2>
-      <p>We will process your account deletion request within <strong>30 days</strong> of receiving your request. You will receive a confirmation email once your account and data have been deleted.</p>
+      <h2>Related Options</h2>
+      <p>For different privacy needs:</p>
+      <ul>
+        <li><strong><a href="delete-account.html">Delete Your Entire Account</a>:</strong> Permanently remove your account and all associated data</li>
+        <li><strong><a href="privacy-policy.html">Privacy Policy</a>:</strong> Learn more about how we handle your data</li>
+      </ul>
 
       <h2>Questions?</h2>
-      <p>If you have any questions about account deletion or data privacy, please contact us:</p>
+      <p>If you have any questions about data deletion or privacy, please contact us:</p>
       <p><strong>Email:</strong> <a href="mailto:timetracker.track@gmail.com">timetracker.track@gmail.com</a></p>
-      <p>For more information about how we handle your data, please read our <a href="privacy-policy.html">Privacy Policy</a>.</p>
+      <p><strong>Response Time:</strong> 7-10 days for general inquiries, 30 days for formal privacy requests</p>
 
       <hr>
 
