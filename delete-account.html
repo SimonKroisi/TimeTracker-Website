@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Privacy Policy – TimeTracker</title>
-  <meta name="description" content="TimeTracker Privacy Policy - How we collect, use, and protect your data.">
+  <title>Delete Account – TimeTracker</title>
+  <meta name="description" content="Learn how to request deletion of your TimeTracker account and associated data.">
 
   <style>
     * {
@@ -215,6 +215,10 @@
       color: var(--teal);
     }
 
+    .policy-content h2:first-child {
+      margin-top: 0;
+    }
+
     .policy-content h3 {
       font-size: 1.1rem;
       margin-top: 20px;
@@ -235,7 +239,7 @@
       color: var(--text-secondary);
     }
 
-    .policy-content ul {
+    .policy-content ul, .policy-content ol {
       margin: 16px 0 16px 24px;
       color: var(--text-secondary);
     }
@@ -280,6 +284,77 @@
       transform: translateX(-4px);
     }
 
+    /* Steps */
+    .steps-container {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .step:last-child {
+      margin-bottom: 0;
+    }
+
+    .step-number {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .step-content {
+      flex: 1;
+    }
+
+    .step-content h4 {
+      margin: 0 0 4px 0;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .step-content p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    /* Important Notice */
+    .notice-box {
+      background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(124, 58, 237, 0.1));
+      border: 1px solid var(--teal);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 24px 0;
+    }
+
+    .notice-box h4 {
+      color: var(--teal);
+      margin: 0 0 8px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .notice-box p {
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
     /* Footer */
     footer {
       background: var(--bg-secondary);
@@ -293,6 +368,15 @@
 
     footer p {
       margin: 0;
+    }
+
+    footer a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      color: var(--teal);
     }
 
     /* Mobile */
@@ -358,8 +442,23 @@
         font-size: 1rem;
       }
 
-      .policy-content ul {
+      .policy-content ul, .policy-content ol {
         margin-left: 16px;
+      }
+
+      .steps-container {
+        padding: 16px;
+      }
+
+      .step {
+        gap: 12px;
+      }
+
+      .step-number {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        font-size: 0.9rem;
       }
 
       footer {
@@ -397,210 +496,102 @@
     <a href="index.html" class="back-link">← Back to Home</a>
 
     <div class="policy-header">
-      <h1>Privacy Policy</h1>
-      <p>Last Updated: January 2026</p>
+      <h1>Delete Your Account</h1>
+      <p>How to request deletion of your TimeTracker account and data</p>
     </div>
 
     <div class="policy-content">
-      <h2>1. Introduction</h2>
-      <p>This Privacy Policy describes how the TimeTracker application ("App", "we", "us") collects, uses, stores, and protects data from users ("you", "your"). The App is a time tracking and project management application for teams.</p>
-      <p>This Privacy Policy applies to all platforms (iOS, Android, Web, and Desktop) and online access to the App.</p>
+      <h2>How to Delete Your Account</h2>
+      <p>If you wish to delete your TimeTracker account and all associated data, please follow these simple steps within the app:</p>
 
-      <h2>2. Data Controller</h2>
-      <p><strong>Simon Kroismayr</strong><br>
-      For inquiries, please contact us at the information provided in Section 15.</p>
+      <div class="steps-container">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Open Settings</h4>
+            <p>Open the TimeTracker app and navigate to <strong>Settings</strong> (gear icon in the menu).</p>
+          </div>
+        </div>
 
-      <h2>3. Data Collected</h2>
-      <h3>3.1 Authentication Data</h3>
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Go to Support / Help</h4>
+            <p>In the Settings menu, tap on <strong>Support / Help</strong>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Create a New Support Request</h4>
+            <p>Tap on <strong>Create New Support Request</strong> or <strong>Contact Support</strong>.</p>
+          </div>
+        </div>
+
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Request Account Deletion</h4>
+            <p>In your message, clearly state that you want to <strong>delete your account and all associated data</strong>. Include your registered email address for verification.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="notice-box">
+        <h4>📧 Alternative: Contact via Email</h4>
+        <p>You can also request account deletion by sending an email to <strong>timetracker.track@gmail.com</strong> with the subject "Account Deletion Request" and include your registered email address.</p>
+      </div>
+
+      <hr>
+
+      <h2>What Data Will Be Deleted</h2>
+      <p>When you request account deletion, the following data will be permanently removed:</p>
       <ul>
-        <li><strong>Google Sign-In:</strong> Email address, name, profile picture</li>
-        <li><strong>Firebase Authentication:</strong> Email, password (hashed), user ID</li>
-        <li>Authentication tokens and session data</li>
+        <li><strong>Account Information:</strong> Your name, email address, profile picture, and login credentials</li>
+        <li><strong>Time Tracking Data:</strong> All recorded work time entries and timestamps</li>
+        <li><strong>Project Data:</strong> Projects you created or own (shared projects will remain for other team members)</li>
+        <li><strong>Tasks and Activities:</strong> All tasks, activity logs, and associated records</li>
+        <li><strong>Media and Files:</strong> Uploaded images, videos, audio messages, and documents</li>
+        <li><strong>User Preferences:</strong> Settings, preferences, and notification configurations</li>
       </ul>
 
-      <h3>3.2 User Profile and Account Data</h3>
+      <h2>Data Retention After Deletion</h2>
+      <p>Please note the following retention periods after your deletion request is processed:</p>
       <ul>
-        <li>Full name</li>
-        <li>Email address</li>
-        <li>Profile picture</li>
-        <li>Device information (manufacturer, model, OS version)</li>
-        <li>User preferences and settings</li>
-        <li>Timezone and language preferences</li>
+        <li><strong>Account Data:</strong> Deleted within <strong>30 days</strong> of request confirmation</li>
+        <li><strong>Backup Data:</strong> May exist in backups for up to <strong>90 days</strong> after deletion</li>
+        <li><strong>Analytics Data:</strong> Anonymized analytics data in Firebase Analytics may be retained for up to <strong>14 months</strong></li>
+        <li><strong>Server Logs:</strong> System logs containing your activity may be retained for up to <strong>30 days</strong></li>
       </ul>
 
-      <h3>3.3 Time Tracking and Project Data</h3>
-      <ul>
-        <li>Work time entries and timestamps</li>
-        <li>Project names and descriptions</li>
-        <li>Team information</li>
-        <li>Tasks and their status</li>
-        <li>Activity logs</li>
-        <li>QR code scan data (for project identification)</li>
-      </ul>
+      <div class="notice-box">
+        <h4>⚠️ Important Information</h4>
+        <p>Account deletion is <strong>permanent and cannot be undone</strong>. Please ensure you have exported any data you wish to keep before requesting deletion. If you are part of a team, your shared project contributions may be retained for other team members.</p>
+      </div>
 
-      <h3>3.4 Media and Files</h3>
-      <ul>
-        <li>Uploaded images and videos</li>
-        <li>Audio messages and voice memos</li>
-        <li>Compressed image versions</li>
-        <li>Video thumbnails</li>
-        <li>File metadata (size, type, upload time)</li>
-      </ul>
+      <hr>
 
-      <h3>3.5 Analytics and Usage Data</h3>
-      <ul>
-        <li>Firebase Analytics: Page views, feature usage, errors/crashes</li>
-        <li>App opening events</li>
-        <li>Feature usage frequency and duration</li>
-        <li>User flow analysis</li>
-        <li>Error and exception logs</li>
-      </ul>
+      <h2>Processing Time</h2>
+      <p>We will process your account deletion request within <strong>30 days</strong> of receiving your request. You will receive a confirmation email once your account and data have been deleted.</p>
 
-      <h2>4. Data Storage and Cloud Services</h2>
-      <h3>4.1 Firebase Services</h3>
-      <p>Your data is processed in the following Google Firebase services:</p>
-      <ul>
-        <li><strong>Firebase Authentication:</strong> Secure user authentication</li>
-        <li><strong>Cloud Firestore:</strong> NoSQL database for user, project, and time data</li>
-        <li><strong>Firebase Storage:</strong> Cloud storage for images, videos, and files</li>
-        <li><strong>Firebase Cloud Functions:</strong> Serverless functions for backend logic</li>
-        <li><strong>Firebase Messaging:</strong> Push notifications</li>
-        <li><strong>Firebase Analytics:</strong> Usage analytics</li>
-        <li><strong>Firebase App Check:</strong> Security verification and fraud prevention</li>
-      </ul>
-      <p><strong>Google Firebase Privacy:</strong> <a href="https://firebase.google.com/support/privacy" target="_blank">https://firebase.google.com/support/privacy</a></p>
-
-      <h3>4.2 Encryption</h3>
-      <ul>
-        <li>Data transmission: SSL/TLS encryption</li>
-        <li>Data at rest: Firebase encryption</li>
-        <li>Sensitive data: Additional application-level encryption</li>
-      </ul>
-
-      <h2>5. Purpose of Data Processing</h2>
-      <p>We use the collected data for the following purposes:</p>
-      <h4>1. Providing App Functionality</h4>
-      <ul>
-        <li>User management and authentication</li>
-        <li>Time tracking and project management</li>
-        <li>Team collaboration and communication</li>
-        <li>Data synchronization across devices</li>
-      </ul>
-
-      <h4>2. Improving the App</h4>
-      <ul>
-        <li>Error identification and fixing</li>
-        <li>Performance monitoring</li>
-        <li>Feature usage analytics</li>
-        <li>User behavior analysis</li>
-      </ul>
-
-      <h4>3. Notifications</h4>
-      <ul>
-        <li>Time-based reminders</li>
-        <li>Team notifications</li>
-        <li>Important app updates</li>
-        <li>Only with user consent</li>
-      </ul>
-
-      <h4>4. Customer Support</h4>
-      <ul>
-        <li>Fixing technical issues</li>
-        <li>User support and help</li>
-        <li>Account management</li>
-      </ul>
-
-      <h2>6. Data Security</h2>
-      <p>We implement the following security measures:</p>
-      <ul>
-        <li><strong>Encrypted Transmission:</strong> SSL/TLS for all data transfers</li>
-        <li><strong>Secure Authentication:</strong> Industry-standard authentication protocols</li>
-        <li><strong>Access Control:</strong> Role-based access and permissions</li>
-        <li><strong>Regular Audits:</strong> Security testing and vulnerability assessments</li>
-        <li><strong>Staff Training:</strong> Privacy awareness and security training</li>
-        <li><strong>Incident Response:</strong> Data breach response plan</li>
-        <li><strong>Firebase Security:</strong> Google manages additional infrastructure security</li>
-      </ul>
-      <p><strong>Note:</strong> Despite these measures, no system can guarantee 100% security.</p>
-
-      <h2>7. User Rights</h2>
-      <h3>7.1 Right to Access</h3>
-      <p>The right to know what data we store about you.</p>
-
-      <h3>7.2 Right to Rectification</h3>
-      <p>The right to correct inaccurate or incomplete data.</p>
-
-      <h3>7.3 Right to Erasure ("Right to be Forgotten")</h3>
-      <p>The right to have your data deleted, under certain conditions.</p>
-
-      <h3>7.4 Right to Data Portability</h3>
-      <p>The right to receive your data in a structured, common format.</p>
-
-      <h3>7.5 Right to Object</h3>
-      <p>The right to object to processing of your data.</p>
-
-      <h3>Requesting Rights:</h3>
-      <p>Contact us at: <strong>timetracker.track@gmail.com</strong><br>
-      We will respond within 30 days.</p>
-
-      <h2>8. Data Deletion and Retention</h2>
-      <h3>8.1 Retention Policies</h3>
-      <ul>
-        <li><strong>Active User Accounts:</strong> Data stored as long as app is used</li>
-        <li><strong>Deleted Accounts:</strong> User data deleted within 30 days</li>
-        <li><strong>Backup Data:</strong> May exist for up to 90 days after deletion</li>
-        <li><strong>Analytics Data:</strong> Firebase Analytics retains data for 14 months</li>
-        <li><strong>Logs:</strong> Server logs retained for up to 30 days</li>
-      </ul>
-
-      <h3>8.2 Account Deletion</h3>
-      <p>Users can delete their account:</p>
-      <ol>
-        <li>In app settings</li>
-        <li>By email request to: <strong>timetracker.track@gmail.com</strong></li>
-      </ol>
-
-      <h2>9. Children and Minors</h2>
-      <p>The TimeTracker App is not intended for persons under 13 years of age. We do not knowingly collect data from children under 13 years old.</p>
-      <p>If we learn that we have collected data from a child under 13 years of age, we will delete it as quickly as possible.</p>
-
-      <h2>10. Third-Party Privacy Policies</h2>
-      <p>The app uses the following third-party services with their own privacy policies:</p>
-      <ul>
-        <li><strong>Google Firebase:</strong> <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></li>
-        <li><strong>Google Sign-In:</strong> <a href="https://policies.google.com/privacy" target="_blank">https://policies.google.com/privacy</a></li>
-        <li><strong>Firebase Analytics:</strong> <a href="https://support.google.com/analytics/answer/9019185" target="_blank">https://support.google.com/analytics/answer/9019185</a></li>
-      </ul>
-
-      <h2>11. Changes to This Privacy Policy</h2>
-      <p>We may update this Privacy Policy at any time. Important changes will:</p>
-      <ul>
-        <li>Be made with at least 30 days' notice</li>
-        <li>Be displayed in the app</li>
-        <li>Be published on our website</li>
-      </ul>
-      <p><strong>Last Update:</strong> January 2026</p>
-
-      <h2>12. Contact Us</h2>
-      <p>For privacy inquiries, complaints, or concerns, please contact:</p>
-      <p><strong>Privacy Contact:</strong><br>
-      Email: timetracker.track@gmail.com<br>
-      <strong>Response Times:</strong><br>
-      Simple inquiries: 7-10 days<br>
-      Privacy requests: 30 days (legally required)</p>
+      <h2>Questions?</h2>
+      <p>If you have any questions about account deletion or data privacy, please contact us:</p>
+      <p><strong>Email:</strong> <a href="mailto:timetracker.track@gmail.com">timetracker.track@gmail.com</a></p>
+      <p>For more information about how we handle your data, please read our <a href="privacy-policy.html">Privacy Policy</a>.</p>
 
       <hr>
 
       <p style="text-align: center; font-size: 0.9rem; color: var(--text-secondary); margin-top: 32px;">
-        <strong>End of Privacy Policy</strong><br>
-        <em>This Privacy Policy is effective as of January 25, 2026</em>
+        <strong>TimeTracker</strong><br>
+        <em>Last updated: January 2026</em>
       </p>
     </div>
   </div>
 
   <!-- FOOTER -->
   <footer>
-    <p>© 2026 TimeTracker · <a href="index.html" style="color: inherit; text-decoration: none;">Home</a> · <a href="privacy-policy.html" style="color: inherit; text-decoration: none;">Privacy</a> · <a href="terms-of-service.html" style="color: inherit; text-decoration: none;">Terms</a> · <a href="delete-account.html" style="color: inherit; text-decoration: none;">Delete Account</a></p>
+    <p>© 2026 TimeTracker · <a href="index.html">Home</a> · <a href="privacy-policy.html">Privacy</a> · <a href="terms-of-service.html">Terms</a> · <a href="delete-account.html">Delete Account</a></p>
   </footer>
 
   <script>
