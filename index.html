@@ -4758,22 +4758,6 @@
   </script>
 
   <script>
-    // ========== APP LAUNCH TOGGLE ==========
-    // Change 'waitlist' to 'released' when the app launches
-    // This will automatically show download buttons instead of waitlist
-    (function() {
-      const APP_STATUS = 'waitlist'; // Change to 'released' when app is live
-      
-      if (APP_STATUS === 'released') {
-        document.documentElement.classList.add('app-released');
-      }
-      
-      // Log for debugging
-      console.log('TimeTracker App Status:', APP_STATUS);
-    })();
-  </script>
-
-  <script>
     // Theme Toggle
     function toggleTheme() {
       const html = document.documentElement;
