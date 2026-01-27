@@ -944,7 +944,7 @@
 
             <div class="success-message" id="successMessage">
                 <div class="success-icon"></div>
-                <div>Welcome to the waitlist!</div>
+                <div id="successTitle">Welcome to the waitlist!</div>
                 <div style="font-size: 1rem; margin-top: 8px; color: #059669; font-weight: 400;">We'll notify you as soon as we launch</div>
             </div>
 
@@ -1087,15 +1087,23 @@
             const savedEmail = localStorage.getItem('waitlistEmail');
             if (savedEmail) {
                 // Already signed up on this device
-                showSuccessState(savedEmail);
+                showSuccessState(savedEmail, true);
             }
         }
 
         // Show success state without form
-        function showSuccessState(email) {
+        function showSuccessState(email, isReturningUser = false) {
             const form = document.getElementById('waitlistForm');
             const successMessage = document.getElementById('successMessage');
+            const successTitle = document.getElementById('successTitle');
             const shareSection = document.getElementById('shareSection');
+            
+            // Change message based on whether it's a returning user
+            if (isReturningUser) {
+                successTitle.textContent = 'You have already signed up, great!';
+            } else {
+                successTitle.textContent = 'Welcome to the waitlist!';
+            }
             
             form.style.display = 'none';
             successMessage.classList.add('show');
@@ -1160,6 +1168,9 @@
                 // Show success message
                 form.style.display = 'none';
                 successMessage.classList.add('show');
+                
+                // Set to first-time signup message
+                document.getElementById('successTitle').textContent = 'Welcome to the waitlist!';
                 
                 // Show share section
                 document.getElementById('shareSection').classList.add('show');
