@@ -41,6 +41,23 @@
       --safe-bottom: env(safe-area-inset-bottom);
     }
 
+    /* APP LAUNCH TOGGLE - Show waitlist by default */
+    .waitlist-only {
+      display: block;
+    }
+
+    .released-only {
+      display: none;
+    }
+
+    /* When app is released, toggle these */
+    html.app-released .waitlist-only {
+      display: none;
+    }
+
+    html.app-released .released-only {
+      display: block;
+
     [data-theme="dark"] {
       --bg: #0f172a;
       --bg-secondary: #1e293b;
@@ -239,8 +256,8 @@
       align-items: center;
       justify-content: center;
       transition: all 0.3s;
-      position: relative;
-      z-index: 1;
+      position: absolute;
+      z-index: 2;
     }
 
     .theme-toggle-btn svg {
@@ -254,6 +271,12 @@
 
     [data-theme="dark"] .theme-toggle-btn.sun svg { fill: var(--text-secondary); }
     [data-theme="dark"] .theme-toggle-btn.moon svg { fill: white; }
+
+    .hero-logo {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 16px;
+    }
 
     .download-btn {
       padding: 10px 18px;
@@ -1706,11 +1729,15 @@
       </p>
 
       <div class="hero-buttons">
-        <a href="#platforms" class="btn btn-primary">
+        <a href="/waitlist" class="btn btn-primary waitlist-only">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Join Waitlist
+        </a>
+        <a href="#platforms" class="btn btn-primary released-only">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Download Free
         </a>
-        <a href="#features" class="btn btn-secondary">
+        <a href="#features" class="btn btn-secondary released-only">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
           See Features
         </a>
@@ -2200,6 +2227,15 @@
     if (localStorage.getItem('theme') === 'dark') {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
+
+    // ========== APP LAUNCH TOGGLE ==========
+    (function() {
+      const APP_STATUS = 'waitlist'; // Change to 'released' when app goes live
+      
+      if (APP_STATUS === 'released') {
+        document.documentElement.classList.add('app-released');
+      }
+    })();
 
     // ============ TIMER (Desktop Matching) ============
     let timerInterval = null;

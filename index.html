@@ -24,8 +24,8 @@
         deviceType = 'tablet';
       }
       
-      // Redirect to mobile.html if mobile device
-      if (deviceType === 'mobile' && window.location.pathname !== '/mobile.html') {
+      // Redirect to mobile.html if mobile device and not already there
+      if (deviceType === 'mobile' && !window.location.href.includes('mobile.html')) {
         window.location.href = '/mobile.html';
         return;
       }
