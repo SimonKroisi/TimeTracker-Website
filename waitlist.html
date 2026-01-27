@@ -565,6 +565,26 @@
             100% { transform: scale(1) rotate(0deg); }
         }
 
+        /* Alternative Signup Link */
+        .alt-signup-link {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .alt-signup-link a {
+            color: var(--teal);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .alt-signup-link a:hover {
+            color: var(--purple);
+            text-decoration: underline;
+        }
+
         /* Share Section */
         .share-section {
             display: none;
@@ -963,6 +983,10 @@
             </div>
 
             <p class="waitlist-count">Join <span id="waitlistCount">...</span> others waiting for launch</p>
+
+            <div class="alt-signup-link">
+                <a onclick="signUpWithAnotherEmail()">Sign up with another email →</a>
+            </div>
         </div>
     </section>
 
@@ -1188,6 +1212,32 @@
                 submitBtn.textContent = 'Join Waitlist';
             }
         });
+
+        // Function to sign up with another email
+        function signUpWithAnotherEmail() {
+            const form = document.getElementById('waitlistForm');
+            const successMessage = document.getElementById('successMessage');
+            const shareSection = document.getElementById('shareSection');
+            const emailInput = document.getElementById('email');
+            const submitBtn = form.querySelector('button');
+            
+            // Reset form
+            emailInput.value = '';
+            emailInput.classList.remove('error');
+            document.getElementById('errorMessage').classList.remove('show');
+            
+            // Reset button
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Join Waitlist';
+            
+            // Hide success message and show form
+            successMessage.classList.remove('show');
+            shareSection.classList.remove('show');
+            form.style.display = 'block';
+            
+            // Focus on email input
+            emailInput.focus();
+        }
 
         // Check on page load
         checkIfAlreadySignedUp();
