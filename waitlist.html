@@ -1144,9 +1144,8 @@
                 // Check if email already exists
                 const existingDoc = await db.collection('waitlist').doc(email).get();
                 if (existingDoc.exists) {
-                    showError('You are already on the waitlist!');
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Join Waitlist';
+                    // Show success state instead of error
+                    showSuccessState(email, true);
                     return;
                 }
                 

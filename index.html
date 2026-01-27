@@ -24,6 +24,12 @@
         deviceType = 'tablet';
       }
       
+      // Redirect to mobile.html if mobile device
+      if (deviceType === 'mobile' && window.location.pathname !== '/mobile.html') {
+        window.location.href = '/mobile.html';
+        return;
+      }
+      
       // Apply classes to html element immediately (before body exists)
       const html = document.documentElement;
       html.classList.add('is-' + deviceType);
