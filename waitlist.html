@@ -1082,10 +1082,31 @@
             }, 4000);
         }
 
+        // Check if already signed up on page load
+        function checkIfAlreadySignedUp() {
+            const savedEmail = localStorage.getItem('waitlistEmail');
+            if (savedEmail) {
+                // Already signed up on this device
+                showSuccessState(savedEmail);
+            }
+        }
+
+        // Show success state without form
+        function showSuccessState(email) {
+            const form = document.getElementById('waitlistForm');
+            const successMessage = document.getElementById('successMessage');
+            const shareSection = document.getElementById('shareSection');
+            
+            form.style.display = 'none';
+            successMessage.classList.add('show');
+            shareSection.classList.add('show');
+            updateWaitlistCount();
+        }
+
         document.getElementById('waitlistForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const email = document.getElementById('email').value.trim();
+            const email = document.getElementById('email').value.trim().toLowerCase();
             const form = document.getElementById('waitlistForm');
             const successMessage = document.getElementById('successMessage');
             const submitBtn = form.querySelector('button');
@@ -1112,14 +1133,26 @@
             submitBtn.textContent = 'Joining...';
             
             try {
-                // Save to Firebase Firestore
-                await db.collection('waitlist').add({
+                // Check if email already exists
+                const existingDoc = await db.collection('waitlist').doc(email).get();
+                if (existingDoc.exists) {
+                    showError('You are already on the waitlist!');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Join Waitlist';
+                    return;
+                }
+                
+                // Save to Firebase Firestore using email as document ID
+                await db.collection('waitlist').doc(email).set({
                     email: email,
                     signedUpAt: firebase.firestore.FieldValue.serverTimestamp(),
                     source: 'website'
                 });
                 
                 console.log('Email saved to Firebase:', email);
+                
+                // Store in localStorage
+                localStorage.setItem('waitlistEmail', email);
                 
                 // Trigger confetti animation
                 createConfetti();
@@ -1136,11 +1169,18 @@
                 
             } catch (error) {
                 console.error('Error saving email:', error);
-                alert('Oops! Something went wrong. Please try again.');
+                if (error.code === 'permission-denied') {
+                    showError('Unable to join. Please try again.');
+                } else {
+                    showError('Something went wrong. Please try again.');
+                }
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Join Waitlist';
             }
         });
+
+        // Check on page load
+        checkIfAlreadySignedUp();
 
         // Share functionality
         const shareUrl = window.location.href;
