@@ -1,0 +1,21 @@
+# TimeTracker App - robots.txt
+# https://timetracker-app.eu/
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://timetracker-app.eu/sitemap.xml
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+
+# Bing specific
+User-agent: Bingbot
+Allow: /
+
+# Disallow crawling of internal/technical pages
+Disallow: /.git/
+Disallow: /.well-known/
