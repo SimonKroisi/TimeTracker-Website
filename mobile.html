@@ -202,17 +202,18 @@
     }
 
     .logo img {
-      width: 36px;
-      height: 36px;
+      width: 28px;
+      height: 28px;
     }
 
     .logo span {
-      font-size: 1.1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       background: linear-gradient(135deg, var(--teal), var(--purple));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      display: inline;
     }
 
     .header-actions {
@@ -361,8 +362,9 @@
     }
 
     .hero-badge {
-      display: inline-flex;
+      display: flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
       background: rgba(0, 150, 136, 0.1);
       border: 1px solid rgba(0, 150, 136, 0.3);
@@ -371,7 +373,8 @@
       font-size: 0.8rem;
       color: var(--teal);
       font-weight: 600;
-      margin-bottom: 20px;
+      margin: 0 auto 20px;
+      width: fit-content;
     }
 
     .hero-badge svg {
@@ -1746,7 +1749,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Join Waitlist
         </a>
-        <a href="#platforms" class="btn btn-primary released-only">
+        <a href="#platforms" class="btn btn-primary released-only" style="display: none;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
           Download Free
         </a>
