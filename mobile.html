@@ -2694,6 +2694,58 @@
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
+
+    // ============ WAITLIST MODE - REDIRECT ALL CLICKS ============
+    const APP_STATUS = 'waitlist'; // Change to 'released' when app goes live
+    
+    if (APP_STATUS === 'waitlist') {
+      document.addEventListener('click', (e) => {
+        // Skip if already on waitlist page
+        if (window.location.href.includes('/waitlist')) return;
+        
+        // Elements that should NOT trigger redirect
+        const excludeSelectors = [
+          '.theme-toggle',
+          '.theme-toggle *',
+          'a[href^="http"]', // External links
+          'a[href^="/privacy"]',
+          'a[href^="/terms"]',
+          'a[href^="/delete"]',
+          'a[href^="/data-deletion"]',
+          'a[href="#"]', // Anchor links
+          '.project-dropdown',
+          '.project-dropdown *',
+          '.timer-emoji-btn',
+          '.timer-emoji-btn *',
+          '.task-item',
+          '.streak-dot',
+          '.calendar-day',
+          '.analytics-bar-wrapper',
+          'button.timer-action-btn',
+          'input',
+          'textarea'
+        ];
+        
+        // Check if click target is in excluded list
+        const shouldExclude = excludeSelectors.some(selector => {
+          try {
+            return e.target.closest(selector);
+          } catch {
+            return false;
+          }
+        });
+        
+        if (shouldExclude) return;
+        
+        // Check if already a link that goes somewhere
+        const linkTarget = e.target.closest('a');
+        if (linkTarget && linkTarget.href && linkTarget.href !== '#') return;
+        
+        // Redirect to waitlist
+        e.preventDefault();
+        window.location.href = '/waitlist';
+      }, true); // Use capture phase to catch all clicks
+    }
   </script>
 
 </body>
