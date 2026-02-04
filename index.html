@@ -518,23 +518,31 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
       margin-bottom: 24px;
       animation: scale-in 0.5s ease-out;
     }
 
     .hero-logo-big img {
-      width: 56px;
-      height: 56px;
+      width: 48px;
+      height: 48px;
       border-radius: 0;
       box-shadow: none;
       background: transparent;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .hero-logo-big:hover img {
+      transform: rotate(-10deg) scale(1.15);
     }
 
     .hero-logo-big span {
-      font-size: 2rem;
+      font-size: 2.5rem;
       font-weight: 800;
-      color: var(--text);
+      background: linear-gradient(135deg, var(--teal), var(--purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
     .floating-icon.pink {
@@ -714,6 +722,11 @@
     .floating-subtext {
       font-size: 0.8rem;
       color: var(--text-secondary);
+    }
+
+    .floating-card:hover {
+      transform: scale(1.05) translateY(-5px);
+      box-shadow: 0 25px 60px var(--shadow);
     }
 
     /* Stats Bar */
