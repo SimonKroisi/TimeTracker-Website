@@ -633,46 +633,45 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      animation: float 6s ease-in-out infinite;
     }
 
     .floating-1 {
-      top: 22%;
-      left: 4%;
+      top: 15%;
+      left: 5%;
       animation: float 7s ease-in-out infinite;
     }
 
     .floating-2 {
-      top: 28%;
-      right: 4%;
+      top: 20%;
+      right: 5%;
       animation: floatReverse 5.5s ease-in-out infinite;
       animation-delay: -1.2s;
     }
 
     .floating-3 {
-      bottom: 28%;
-      left: 6%;
+      bottom: 25%;
+      left: 8%;
       animation: float 6.2s ease-in-out infinite;
       animation-delay: -2.8s;
     }
 
     .floating-4 {
-      bottom: 22%;
-      right: 6%;
+      bottom: 20%;
+      right: 8%;
       animation: floatReverse 8s ease-in-out infinite;
       animation-delay: -0.5s;
     }
 
     .floating-5 {
-      top: 55%;
-      right: 12%;
+      top: 50%;
+      right: 3%;
       animation: float 5s ease-in-out infinite;
       animation-delay: -3.5s;
     }
 
     .floating-6 {
-      top: 18%;
-      left: 15%;
+      top: 45%;
+      left: 3%;
       animation: floatReverse 6.8s ease-in-out infinite;
       animation-delay: -4.2s;
     }
@@ -4056,7 +4055,8 @@
           <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         </div>
       </div>
-      <a href="#" class="nav-cta">Get Started</a>
+      <a href="/waitlist" class="nav-cta waitlist-only" onclick="event.preventDefault(); window.location.href='/waitlist';">Join Waitlist</a>
+      <a href="#platforms" class="nav-cta released-only">Get Started</a>
     </div>
   </nav>
 
